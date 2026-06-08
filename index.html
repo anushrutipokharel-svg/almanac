@@ -305,6 +305,22 @@ input[type=date].field,input[type=time].field{color-scheme:light}
 .stage .passbtn.has{background:var(--purple-bg);color:var(--purple-d);border-color:transparent}
 .stage .passbtn.add{color:var(--faint);border-style:dashed}
 .stage .passbtn:hover{border-color:var(--purple);border-style:solid}
+.stage .cardbtn.has{background:var(--pink-bg);color:var(--pink-d)}
+.stage .cardbtn:hover{border-color:var(--pink)}
+#card-rows .cardrow{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px}
+#card-rows .cardno{font-size:11px;font-weight:700;color:var(--soft);min-width:30px;letter-spacing:.02em;padding-top:9px}
+#card-rows .cardfields{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+#card-rows textarea.field{width:100%;resize:vertical;line-height:1.45;padding:8px 10px}
+#card-rows .cq{min-height:38px}
+#card-rows .ca{min-height:46px}
+#card-rows .carddel{border:none;background:none;color:var(--faint);font-size:19px;line-height:1;padding:6px 4px 0;cursor:pointer;flex:none}
+#card-rows .carddel:hover{color:var(--pink-d)}
+.stage .mast{display:inline-flex;gap:3px;flex:none;margin-left:2px}
+.stage .mast .mlv{font-size:9.5px;font-weight:700;letter-spacing:.02em;padding:2px 6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--faint);line-height:1.5;transition:.14s}
+.stage .mast .mlv:hover{border-color:var(--soft);color:var(--soft)}
+.stage .mast .mlv.on.shaky{background:var(--amber-bg);color:var(--amber-d);border-color:transparent}
+.stage .mast .mlv.on.ok{background:var(--purple-bg);color:var(--purple-d);border-color:transparent}
+.stage .mast .mlv.on.solid{background:var(--green-bg);color:var(--green-d);border-color:transparent}
 .pass-sub{font-size:13px;color:var(--soft);margin:0 0 14px;font-family:'Fraunces',serif;font-style:italic}
 #pass-rows .passrow{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap}
 #pass-rows .passno{font-size:11px;font-weight:700;color:var(--soft);min-width:50px;letter-spacing:.02em}
@@ -347,6 +363,29 @@ input[type=date].field,input[type=time].field{color-scheme:light}
 /* history */
 .hist-bar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-bottom:16px;font-size:13px;color:var(--soft)}
 .htable{width:100%;border-collapse:collapse;font-size:13.5px}
+/* insights */
+.iblock .ihd,.istat-card .ihd{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.ihd>span:first-child{font-size:12.5px;font-weight:700;color:var(--ink)}
+.isub{font-size:11px;color:var(--soft);font-weight:500}
+.ichart{display:flex;align-items:flex-end;gap:3px;height:92px;padding:5px 4px;background:linear-gradient(180deg,#fff,var(--card2));border:1px solid var(--line);border-radius:12px;margin-top:8px}
+.ibar{flex:1;min-width:0;height:var(--h);min-height:3px;background:var(--line2);border-radius:3px 3px 0 0;align-self:flex-end;transition:height .55s cubic-bezier(.2,.8,.2,1)}
+.ibar.has{background:linear-gradient(180deg,var(--purple),var(--purple-d))}
+.ibar.sun.has{background:linear-gradient(180deg,var(--faint),var(--soft))}
+.ibar.today{outline:2px solid var(--pink);outline-offset:1px;border-radius:3px}
+.ipace{margin-top:12px;border-radius:12px;padding:11px 14px;font-size:13px;line-height:1.5;border:1px solid var(--line);color:var(--soft)}
+.ipace.ok{background:var(--green-bg);border-color:transparent;color:var(--green-d)}
+.ipace.behind{background:var(--amber-bg);border-color:transparent;color:var(--amber-d)}
+.igrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+@media(max-width:560px){.igrid{grid-template-columns:1fr}}
+.istat-card{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:13px 15px}
+.idonut{--p:0;width:94px;height:94px;border-radius:50%;margin:10px auto 9px;background:conic-gradient(var(--green) calc(var(--p)*1%),var(--line2) 0);display:grid;place-items:center;position:relative}
+.idonut::before{content:"";position:absolute;inset:11px;border-radius:50%;background:var(--card2)}
+.idonut span{position:relative;font-family:'Fraunces',serif;font-weight:600;font-size:21px;color:var(--green-d)}
+.iacc-lab{font-size:11.5px;color:var(--soft);text-align:center;line-height:1.45}
+.ifade{display:flex;flex-direction:column;gap:7px;margin-top:9px}
+.ifrow{display:flex;align-items:center;gap:8px;font-size:12.5px}
+.ifn{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink)}
+.ifc{font-weight:700;color:var(--pink-d);background:var(--pink-bg);border-radius:6px;padding:1px 7px;font-size:11px;flex:none}
 .htable th{text-align:left;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);padding:8px 10px;border-bottom:1px solid var(--line);font-weight:700}
 .htable td{padding:9px 10px;border-bottom:1px solid var(--line2);vertical-align:top}
 .htable tr:hover td{background:var(--card2)}
@@ -375,6 +414,34 @@ input[type=date].field,input[type=time].field{color-scheme:light}
 .excard .exmeta{font-size:11.5px;color:var(--soft);margin-top:6px;display:flex;gap:6px;flex-wrap:wrap}
 .excard .exmeta b{color:var(--ink);font-weight:600}
 .extrk{font-size:11.5px;color:var(--faint);font-style:italic;margin-top:6px}
+.scorepill{display:inline-block;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:7px;background:var(--card2);color:var(--soft);margin-left:4px;vertical-align:1px}
+.scorepill.good{background:var(--green-bg);color:var(--green-d)}
+.scorepill.ok{background:var(--amber-bg);color:var(--amber-d)}
+.scorepill.low{background:var(--pink-bg);color:var(--pink-d)}
+.scoregrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:4px}
+.scoregrid label{display:block;font-size:11px;color:var(--soft);font-weight:600;margin-bottom:4px}
+.mssummary{display:flex;gap:10px;margin-bottom:14px}
+.mssummary .msstat{flex:1;background:var(--card2);border:1px solid var(--line);border-radius:13px;padding:11px 12px;text-align:center}
+.mssummary .msstat .n{font-family:'Fraunces',serif;font-weight:600;font-size:26px;line-height:1}
+.mssummary .msstat .l{font-size:11px;color:var(--soft);margin-top:4px}
+.mssummary .up{color:var(--green-d);font-weight:700}.mssummary .dn{color:var(--pink-d);font-weight:700}
+.msspark{background:linear-gradient(180deg,#fff,var(--card2));border:1px solid var(--line);border-radius:14px;padding:12px 12px 8px;margin-bottom:14px}
+.msspark-lab{display:flex;gap:14px;justify-content:flex-end;font-size:10.5px;color:var(--soft);margin-top:4px}
+.msspark-lab i{display:inline-block;width:14px;height:0;border-top:2px dashed currentColor;vertical-align:middle;margin-right:4px}
+.msspark-lab span:first-child i{color:var(--amber)}.msspark-lab span:last-child i{color:var(--green)}
+.mslist{display:flex;flex-direction:column;gap:8px}
+.msrow{display:flex;align-items:center;gap:10px}
+.msrow .msdot{width:9px;height:9px;border-radius:50%;flex:none;background:var(--soft)}
+.msrow .msdot.good{background:var(--green)}.msrow .msdot.ok{background:var(--amber)}.msrow .msdot.low{background:var(--pink)}
+.msrow .msb{flex:1;min-width:0}
+.msrow .mst{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msrow .msm{font-size:11px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msrow .msbar{width:84px;height:7px;border-radius:20px;background:var(--card2);overflow:hidden;flex:none}
+.msrow .msbar i{display:block;height:100%;background:var(--soft)}
+.msrow .msbar i.good{background:var(--green)}.msrow .msbar i.ok{background:var(--amber)}.msrow .msbar i.low{background:var(--pink-d)}
+.msrow .msval{font-size:12px;font-weight:700;min-width:48px;text-align:right;flex:none;color:var(--soft)}
+.msrow .msval.good{color:var(--green-d)}.msrow .msval.ok{color:var(--amber-d)}.msrow .msval.low{color:var(--pink-d)}
+@media(max-width:560px){.msrow .msbar{display:none}.scoregrid{grid-template-columns:1fr 1fr}}
 .exhint{font-size:12.5px;color:var(--soft);margin:2px 0 16px}
 .exhint b{color:var(--purple-d);font-weight:600}
 
@@ -519,6 +586,10 @@ input[type=date].field,input[type=time].field{color-scheme:light}
 @keyframes fall{to{transform:translateY(110vh) rotate(680deg);opacity:0}}
 .toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(24px);background:var(--purple-d);color:#fff;font-weight:700;padding:13px 22px;border-radius:13px;font-family:'Hanken Grotesk';font-size:15px;box-shadow:0 16px 44px -12px rgba(120,80,120,.4);opacity:0;transition:.4s;z-index:10000;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.undo{display:flex;align-items:center;gap:14px;pointer-events:auto;background:var(--ink)}
+.toast.undo .undo-btn{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.42);color:#fff;font-weight:700;font-size:13px;padding:5px 14px;border-radius:9px;cursor:pointer;font-family:inherit}
+.toast.undo .undo-btn:hover{background:rgba(255,255,255,.3)}
+.banner.amber{background:var(--amber-bg);border-left-color:var(--amber)}
 
 /* ===== mobile ===== */
 @media(max-width:780px){
@@ -561,6 +632,15 @@ input[type=date].field,input[type=time].field{color-scheme:light}
 .sp-prompt{font-size:13px;color:var(--soft);margin-top:10px;line-height:1.5;max-width:340px;margin-left:auto;margin-right:auto}
 .sp-prompt b{color:var(--ink)}
 .sp-ask{font-family:'Fraunces',serif;font-style:italic;font-size:15.5px;color:var(--purple-d);margin-top:12px}
+.sp-card.has-cues{text-align:left;justify-content:flex-start}
+.sp-cuelab{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--pink-d);margin:10px 0 6px}
+.sp-cues{margin:0 0 2px;padding-left:22px;display:flex;flex-direction:column;gap:7px}
+.sp-cues li{font-size:14.5px;color:var(--ink);line-height:1.4}
+.sp-cues li::marker{color:var(--faint);font-weight:700;font-size:12px}
+.sp-qa{display:flex;flex-direction:column;gap:10px;margin:8px 0 2px;max-height:46vh;overflow:auto}
+.sp-qarow{border-left:2px solid var(--line);padding:1px 0 1px 11px}
+.sp-q{font-size:13px;font-weight:700;color:var(--ink);line-height:1.4}
+.sp-a{font-size:13px;color:var(--soft);line-height:1.5;margin-top:3px;white-space:pre-wrap}
 .sp-controls{display:flex;gap:8px;margin-top:16px;justify-content:center;flex-wrap:wrap}
 .sp-rate{margin-top:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .sp-rate button{display:flex;flex-direction:column;align-items:center;gap:1px;padding:11px 6px;border-radius:12px;line-height:1.15;position:relative}
@@ -825,6 +905,7 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
         <div class="streakcard"><span class="fl" id="fl"></span><div><div class="n"><span id="streak">0</span></div><div class="l">day streak</div></div></div>
       </div>
       <div id="carry-banner"></div>
+      <div id="backup-banner" class="no-print"></div>
       <div class="stats" id="today-stats"></div>
 
       <div class="card" style="padding:0;background:none;border:none;box-shadow:none;margin-bottom:15px"><div class="recap" id="weekly-recap"></div></div>
@@ -894,6 +975,10 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
         <div class="actions"><button class="btn" onclick="editExam()">Edit dates</button></div></div>
       <div class="exhint" id="exam-hint"></div>
       <div class="exgrid" id="exam-grid"></div>
+      <div class="card" style="margin-top:16px">
+        <div class="ch"><h3>Mock-test scores</h3><span class="tag" id="mock-tag"></span></div>
+        <div id="mock-scores"></div>
+      </div>
       <div class="card" style="margin-top:16px">
         <div class="ch"><h3>All achievements</h3><span class="tag" id="ach-count"></span></div>
         <div class="ach-grid" id="ach-grid"></div>
@@ -976,6 +1061,10 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
     <!-- HISTORY -->
     <section class="view" id="v-history">
       <div class="head"><div class="title"><h2>History</h2><div class="sub">Everything you've completed — view, print &amp; back up</div></div></div>
+      <div class="card no-print" id="insights-card">
+        <div class="ch"><h3>Insights</h3><span class="tag">last 21 days</span></div>
+        <div id="insights"></div>
+      </div>
       <div class="card">
         <div class="hist-bar">
           From <input class="field" type="date" id="h-from" onchange="renderHistory()">
@@ -1262,12 +1351,22 @@ function pacePlan(){const ty=todayY();
   return {first,days,remaining,needPerWk,rate};}
 
 /* ===== weighted readiness ===== */
+const MAST=['—','Shaky','OK','Solid'];
+const MASTCLS=['','shaky','ok','solid'];
 function weightMid(band){if(!band)return 8;const s=String(band);const r=s.match(/(\d+)\s*[^\d]+\s*(\d+)/);if(r)return(+r[1]+ +r[2])/2;const one=s.match(/(\d+)/);return one?+one[1]:8;}
 function weightedReadiness(p){let earned=0,total=0;const groups={};
   p.stages.forEach(s=>{(groups[s.section]=groups[s.section]||{w:weightMid(s.weight||'8%'),n:0,done:0})});
   p.stages.forEach(s=>{groups[s.section].n++;if(s.done)groups[s.section].done++;});
   Object.values(groups).forEach(g=>{total+=g.w;earned+=g.w*(g.n?g.done/g.n:0);});
   return total?Math.round(earned/total*100):0;}
+/* confidence-weighted: a cleared chapter counts only as much as its mastery (shaky≈⅓, ok≈⅔, solid=1) */
+function weightedConfidence(p){let earned=0,total=0;const groups={};
+  p.stages.forEach(s=>{(groups[s.section]=groups[s.section]||{w:weightMid(s.weight||'8%'),n:0,m:0})});
+  p.stages.forEach(s=>{const g=groups[s.section];g.n++;if(s.done)g.m+=((s.mastery||2)/3);});
+  Object.values(groups).forEach(g=>{total+=g.w;earned+=g.w*(g.n?g.m/g.n:0);});
+  return total?Math.round(earned/total*100):0;}
+function masteryCounts(){const c=[0,0,0,0];S.projects.forEach(p=>p.stages.forEach(s=>{if(s.done)c[s.mastery||2]++;}));return c;}
+function setMastery(pid,i,lv){const p=S.projects.find(x=>x.id===pid);if(!p)return;const s=p.stages[i];if(!s)return;s.mastery=lv;save();renderProjects();renderToday();toast('Marked '+MAST[lv].toLowerCase()+'.');}
 
 /* ===== growing tree ===== */
 function growthPoints(){return computeHours()+chaptersCleared()*1.5+papersDone()*3;}
@@ -1422,7 +1521,8 @@ function taskRow(t){const p=t.project?S.projects.find(x=>x.id===t.project):null;
       ${t.done&&t.doneAt?'done '+pretty(t.doneAt):'due '+pretty(t.date)}
     </div></div><button class="x" onclick="delTask('${t.id}')">×</button></div>`;}
 function toggleTask(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;t.done=!t.done;t.doneAt=t.done?todayY():null;if(t.done){miniConfetti();}save();refreshAll();}
-function delTask(id){S.tasks=S.tasks.filter(x=>x.id!==id);save();refreshAll();}
+function delTask(id){const t=S.tasks.find(x=>x.id===id);if(!t)return;const idx=S.tasks.indexOf(t);S.tasks=S.tasks.filter(x=>x.id!==id);save();refreshAll();
+  softDelete('Task deleted.',()=>{S.tasks.splice(Math.min(idx,S.tasks.length),0,t);save();refreshAll();});}
 
 /* ===== TODO ===== */
 function fillProjSel(){document.getElementById('td-proj').innerHTML='<option value="">No subject</option>'+S.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('');}
@@ -1442,7 +1542,7 @@ function addTodo(){const el=document.getElementById('td-text'),v=el.value.trim()
 function ensureRecall(s){if(s.done&&!s.recall){s.recall={stage:0,due:addDays(s.doneAt||todayY(),1),last:s.doneAt||todayY()};}}
 function recallDue(){const ty=todayY();const out=[];
   S.projects.forEach(p=>p.stages.forEach((s,i)=>{ensureRecall(s);if(s.done&&s.recall&&s.recall.due<=ty)
-    out.push({pid:p.id,i,name:s.name,subject:p.name,color:p.color,due:s.recall.due,over:Math.max(0,daysBetween(s.recall.due,ty))});}));
+    out.push({pid:p.id,i,name:s.name,subject:p.name,color:p.color,due:s.recall.due,over:Math.max(0,daysBetween(s.recall.due,ty)),cards:(s.cards||[]),mastery:s.mastery||0});}));
   out.sort((a,b)=>a.due.localeCompare(b.due));return out;}
 function recallUpcoming(days){const ty=todayY(),lim=addDays(ty,days),map={};
   S.projects.forEach(p=>p.stages.forEach((s,i)=>{ensureRecall(s);if(s.done&&s.recall&&s.recall.due>ty&&s.recall.due<=lim){
@@ -1466,6 +1566,11 @@ function gradeRecall(pid,i,grade){const p=S.projects.find(x=>x.id===pid);if(!p)r
   else if(grade==='good'){r.stage=Math.min(r.stage+1,RECALL_INTERVALS.length-1);r.due=addDays(ty,RECALL_INTERVALS[r.stage]);}
   else if(grade==='easy'){r.stage=Math.min(r.stage+2,RECALL_INTERVALS.length-1);r.due=addDays(ty,RECALL_INTERVALS[r.stage]);}
   r.last=ty;
+  // keep mastery in step with how retrieval actually went
+  if(grade==='forgot')s.mastery=1;
+  else if(grade==='hard')s.mastery=2;
+  else if(grade==='good')s.mastery=Math.max(2,s.mastery||2);
+  else if(grade==='easy')s.mastery=3;
   (S.recallLog=S.recallLog||[]).push({date:ty,name:s.name,subject:p.name,grade});
   save();
   return {nextIn:daysBetween(ty,r.due),grade};}
@@ -1513,16 +1618,22 @@ function sprintSkip(){if(!sprint)return;sprint.queue.push(sprint.queue[sprint.po
   if(sprint.pos>=sprint.queue.length)finishSprint();else renderSprint();}
 function renderSprint(){if(!sprint)return;const total=sprint.queue.length,pos=sprint.pos,card=sprint.queue[pos];
   const pct=Math.round(pos/total*100);
+  const cues=card.cards||[];
+  const body=cues.length
+    ? (sprint.revealed
+        ? `<div class="sp-qa">`+cues.map(c=>`<div class="sp-qarow"><div class="sp-q">${esc(c.q)}</div>${c.a?`<div class="sp-a">${esc(c.a)}</div>`:''}</div>`).join('')+`</div><div class="sp-ask">How well did it come back?</div>`
+        : `<div class="sp-cuelab">Recall ${cues.length} cue${cues.length>1?'s':''} from memory</div><ol class="sp-cues">`+cues.map(c=>`<li>${esc(c.q)}</li>`).join('')+`</ol>`)
+    : (sprint.revealed
+        ? `<div class="sp-ask">How well did it come back?</div>`
+        : `<div class="sp-prompt">Look away and rebuild it from memory — the core ideas, treatment, formulas. <b>Then</b> open your notes to check.</div>`);
   MD.innerHTML=`<div class="sprint">
     <div class="sp-top"><span class="sp-kicker">Recall Sprint${sprint.subject?(' · '+esc(sprint.subject)):''}</span><button class="sp-x" onclick="closeModal()" aria-label="Close">×</button></div>
     <div class="sp-progress"><i style="width:${pct}%"></i></div>
     <div class="sp-count">Card ${pos+1} of ${total}${sprint.reviewed?(' · '+sprint.reviewed+' rated'):''}</div>
-    <div class="sp-card" style="--cc:${card.color}">
+    <div class="sp-card${cues.length?' has-cues':''}" style="--cc:${card.color}">
       <div class="sp-subject" style="color:${card.color}">${esc(card.subject)}${card.over>0?` · <span class="sp-over">${card.over}d overdue</span>`:''}</div>
       <div class="sp-chapter">${esc(card.name)}</div>
-      ${sprint.revealed
-        ? `<div class="sp-ask">How well did it come back?</div>`
-        : `<div class="sp-prompt">Look away and rebuild it from memory — the core ideas, treatment, formulas. <b>Then</b> open your notes to check.</div>`}
+      ${body}
     </div>
     ${sprint.revealed
       ? `<div class="rate sp-rate">
@@ -1618,7 +1729,8 @@ function renderTT(){const st=studyType(ttDate);
 function shiftTT(n){ttDate=addDays(ttDate,n);renderTT();}
 function goTTToday(){ttDate=todayY();renderTT();}
 function toggleBlock(id){const b=(S.blocks[ttDate]||[]).find(x=>x.id===id);if(!b)return;b.done=!b.done;if(b.done){miniConfetti();if((S.blocks[ttDate]||[]).filter(x=>x.done).length===1)toast('Day logged — streak intact.');}save();renderTT();afterRender();}
-function delBlock(id){S.blocks[ttDate]=(S.blocks[ttDate]||[]).filter(b=>b.id!==id);save();renderTT();}
+function delBlock(id){const arr=S.blocks[ttDate]||[];const b=arr.find(x=>x.id===id);if(!b)return;const idx=arr.indexOf(b);S.blocks[ttDate]=arr.filter(x=>x.id!==id);save();renderTT();
+  softDelete('Block deleted.',()=>{(S.blocks[ttDate]=S.blocks[ttDate]||[]).splice(Math.min(idx,S.blocks[ttDate].length),0,b);save();renderTT();});}
 function suggestDay(){const st=studyType(ttDate);if(st.rest){toast('Sunday is your rest day.');return;}
   const arr=S.blocks[ttDate]||[];const has=l=>arr.some(b=>b.label===l);
   const add=(type,label,s,e)=>{if(!has(label))arr.push({id:uid(),type,label,start:s,end:e,done:false});};
@@ -1658,6 +1770,8 @@ function renderProjects(){const el=document.getElementById('proj-list');
             <div class="chk ${s.done?'done':''}"></div><span class="sn">${esc(s.name)}</span>
             ${s.done?(due?'<span class="rtag due">recall due</span>':(s.recall?`<span class="rtag">next ${pretty(s.recall.due)}</span>`:'')):''}
             ${s.done&&s.doneAt?`<span class="sd">${pretty(s.doneAt)}</span>`:''}
+            ${s.done?`<span class="mast">${[1,2,3].map(lv=>`<button type="button" class="mlv ${MASTCLS[lv]} ${(s.mastery||2)===lv?'on':''}" onclick="event.stopPropagation();setMastery('${p.id}',${idx},${lv})" title="Mark ${MAST[lv].toLowerCase()}">${MAST[lv]}</button>`).join('')}</span>`:''}
+            <button class="passbtn cardbtn ${(s.cards&&s.cards.length)?'has':'add'}" onclick="event.stopPropagation();openCards('${p.id}',${idx})" title="Recall cards (Q&A)">${(s.cards&&s.cards.length)?('🗂 '+s.cards.length):'+ cards'}</button>
             <button class="passbtn ${(s.passes&&s.passes.length)?'has':'add'}" onclick="event.stopPropagation();openPasses('${p.id}',${idx})" title="Study & revision dates">${(s.passes&&s.passes.length)?('↺ '+s.passes.length+' · '+fmtPass(s.passes[s.passes.length-1])):'+ dates'}</button></div>`;}).join('')}</div>
       </div>`;}).join('');
     return `<div class="pcard"><div class="pribbon" style="background:linear-gradient(90deg,${p.color},transparent)"></div>
@@ -1666,7 +1780,7 @@ function renderProjects(){const el=document.getElementById('proj-list');
         <div class="ring" style="--p:${pct};--rc:${p.color}"><span>${pct}%</span></div></div>
       ${p.desc?`<div class="pdesc">${esc(p.desc)}</div>`:''}
       <div class="wbar">${order.map(g=>{const gd=g.items.filter(x=>x.s.done).length/g.items.length;const w=weightMid(g.weight);return `<i style="width:${(w/totW*100).toFixed(2)}%;background:${gd>=1?p.color:gd>0?p.color+'88':p.color+'22'}" title="Section ${esc(g.section)} · ${esc(g.weight)} · ${Math.round(gd*100)}%"></i>`;}).join('')}</div>
-      <div class="wbartx">${wready}% weighted readiness · darker = cleared. Highest-weight sections sit at the left.</div>
+      <div class="wbartx"><b style="color:${p.color}">${wready}%</b> covered by weight · <b style="color:var(--green-d)">${weightedConfidence(p)}%</b> confident (mastery-weighted). Darker = cleared; highest-weight sections sit left.</div>
       ${recallLine}
       ${secHTML}
       <div class="pfoot"><span class="tag" style="color:var(--soft);font-size:12.5px;align-self:center">${done}/${tot} chapters · started ${pretty(p.createdAt)}</span>
@@ -1674,11 +1788,12 @@ function renderProjects(){const el=document.getElementById('proj-list');
         <button class="btn sm" onclick="openProject('${p.id}')">Edit</button><button class="btn sm ghost" onclick="delProject('${p.id}')">Delete</button></div>
     </div>`;}).join('');}
 function toggleStage(pid,i){const p=S.projects.find(x=>x.id===pid);if(!p)return;const s=p.stages[i];s.done=!s.done;s.doneAt=s.done?todayY():null;
-  if(s.done){if(s.recallStash){s.recall=s.recallStash;delete s.recallStash;}else{s.recall={stage:0,due:addDays(todayY(),1),last:todayY()};}
+  if(s.done){if(!s.mastery)s.mastery=2;if(s.recallStash){s.recall=s.recallStash;delete s.recallStash;}else{s.recall={stage:0,due:addDays(todayY(),1),last:todayY()};}
     if(p.stages.every(x=>x.done)){bigConfetti();toast(p.name+' — all chapters cleared.');}else{miniConfetti();toast('Cleared — first recall scheduled tomorrow.');}}
   else{if(s.recall){s.recallStash=s.recall;}s.recall=null;}
   save();renderProjects();renderToday();}
-function delProject(id){if(!confirm('Delete this subject and its chapters?'))return;S.projects=S.projects.filter(p=>p.id!==id);save();renderProjects();}
+function delProject(id){const p=S.projects.find(x=>x.id===id);if(!p)return;const idx=S.projects.indexOf(p);S.projects=S.projects.filter(x=>x.id!==id);save();renderProjects();renderToday();
+  softDelete('Subject \u201c'+p.name+'\u201d deleted.',()=>{S.projects.splice(Math.min(idx,S.projects.length),0,p);save();renderProjects();renderToday();});}
 
 /* ===== chapter study / revision passes ===== */
 let passEdit=null;
@@ -1713,6 +1828,33 @@ function savePasses(){const p=S.projects.find(x=>x.id===passEdit.pid);if(!p){clo
   s.passes=passEdit.list.filter(x=>x.from).map(x=>({from:x.from,to:(x.to&&x.to>=x.from)?x.to:'',note:(x.note||'').trim()})).sort((a,b)=>a.from.localeCompare(b.from));
   save();closeModal();renderProjects();renderToday();toast(s.passes.length?'Dates saved.':'Dates cleared.');}
 
+/* ===== recall cards (Q&A cues that drive the sprint) ===== */
+let cardEdit=null;
+function openCards(pid,i){const p=S.projects.find(x=>x.id===pid);if(!p)return;const s=p.stages[i];if(!s)return;
+  cardEdit={pid,i,list:(s.cards||[]).map(c=>({q:c.q||'',a:c.a||''}))};
+  MD.innerHTML=`<h3 style="margin-bottom:3px">Recall cards</h3>
+    <div class="pass-sub">${esc(s.name)}</div>
+    <div id="card-rows"></div>
+    <button class="btn sm ghost addpass" onclick="cardAdd()">+ Add a card</button>
+    <div class="passhint">Write a short <b>cue</b> (a question or prompt) and the <b>answer</b> — the treatment, formula, or key points. During a recall sprint you'll see the cues first, rebuild the answers from memory, then reveal to check. Keep them tight: one idea per card.</div>
+    <div class="actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveCards()">Save</button></div>`;
+  renderCardRows();showModal();}
+function renderCardRows(){const el=document.getElementById('card-rows');if(!el)return;
+  if(!cardEdit.list.length){el.innerHTML='<div class="passempty">No cards yet. Add a cue + answer to make this chapter testable in the recall sprint.</div>';return;}
+  el.innerHTML=cardEdit.list.map((c,k)=>`<div class="cardrow">
+    <span class="cardno">${k+1}</span>
+    <div class="cardfields">
+      <textarea class="field cq" placeholder="Cue / question — e.g. Ind AS 115: the 5 steps?" oninput="cardSet(${k},'q',this.value)">${esc(c.q)}</textarea>
+      <textarea class="field ca" placeholder="Answer / key points" oninput="cardSet(${k},'a',this.value)">${esc(c.a)}</textarea>
+    </div>
+    <button class="carddel" title="Remove card" onclick="cardDel(${k})">×</button></div>`).join('');}
+function cardSet(k,f,v){cardEdit.list[k][f]=v;}
+function cardAdd(){cardEdit.list.push({q:'',a:''});renderCardRows();const el=document.getElementById('card-rows');if(el){const ta=el.querySelectorAll('.cardrow:last-child textarea');if(ta[0])ta[0].focus();}}
+function cardDel(k){cardEdit.list.splice(k,1);renderCardRows();}
+function saveCards(){const p=S.projects.find(x=>x.id===cardEdit.pid);if(!p){closeModal();return;}const s=p.stages[cardEdit.i];
+  s.cards=cardEdit.list.map(c=>({q:(c.q||'').trim(),a:(c.a||'').trim()})).filter(c=>c.q);
+  save();closeModal();renderProjects();renderToday();renderRecall();toast(s.cards.length?(s.cards.length+' card'+(s.cards.length>1?'s':'')+' saved.'):'Cards cleared.');}
+
 /* ===== CALENDAR ===== */
 const EVGLYPH={paper:'◆',milestone:'✦',event:'•'};
 function recallByDate(){const map={};S.projects.forEach(p=>p.stages.forEach(s=>{if(s.done&&s.recall){map[s.recall.due]=(map[s.recall.due]||0)+1;}}));return map;}
@@ -1735,13 +1877,45 @@ function selectDay(ds,keep){calSel=ds;const p=document.getElementById('cal-day-p
   const rec=[];S.projects.forEach(pr=>pr.stages.forEach(s=>{if(s.done&&s.recall&&s.recall.due===ds)rec.push({name:s.name,subject:pr.name,color:pr.color});}));
   p.innerHTML=`<div class="ch"><h3>${prettyY(ds)}</h3><button class="btn sm primary" onclick="openEvent('${ds}')">+ Add</button></div>${mt.length?mt.map(mtgRow).join(''):''}${rec.length?`<div style="margin-top:6px">${rec.map(r=>`<div class="mini"><div class="mt" style="width:auto;color:${r.color}">↺ recall</div><div style="flex:1"><div class="ml">${esc(r.name)}</div><div class="ms">${esc(r.subject)}</div></div></div>`).join('')}</div>`:''}${(!mt.length&&!rec.length)?'<div class="empty">Nothing here yet.</div>':''}`;
   if(!keep)p.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function fmtDur(min){min=Math.round(min||0);if(!min)return'';const h=Math.floor(min/60),m=min%60;return h?(h+'h'+(m?String(m).padStart(2,'0'):'')):(m+'m');}
+function scorePct(m){return (m&&m.score!=null&&m.outOf)?Math.round(m.score/m.outOf*100):null;}
+function scoreClass(m){const p=scorePct(m);return p==null?'':(p>=55?'good':p>=40?'ok':'low');}
 function mtgRow(m){const c={paper:'var(--pink-bg)',milestone:'var(--purple-bg)',event:'var(--green-bg)'}[m.kind]||'var(--card2)';
+  const scored=(m.kind==='paper'&&m.score!=null);
+  const scoreTxt=scored?(m.score+'/'+(m.outOf||100)+(m.timeMin?(' · '+fmtDur(m.timeMin)):'')):'';
   return `<div class="mtg"><div class="mc" style="background:${c}">${EVGLYPH[m.kind]||'·'}</div>
-    <div class="mb"><div class="mt">${m.done?'✓ ':''}${esc(m.title)}</div><div class="mm">${m.time?fmtT(toMin(m.time))+' · ':''}${esc(m.notes||m.kind)}</div></div>
+    <div class="mb"><div class="mt">${m.done?'✓ ':''}${esc(m.title)}${scored?` <span class="scorepill ${scoreClass(m)}">${scoreTxt}</span>`:''}</div><div class="mm">${m.time?fmtT(toMin(m.time))+' · ':''}${esc(m.notes||m.kind)}${(scored&&m.weak)?(' · <i>weak: '+esc(m.weak)+'</i>'):''}</div></div>
+    ${m.kind==='paper'?`<button class="btn sm" onclick="openScore('${m.id}')">${scored?'✎ score':'Score'}</button>`:''}
     ${m.kind==='paper'?`<button class="btn sm" onclick="togMtgDone('${m.id}')">${m.done?'undo':'Done'}</button>`:''}
     <button class="btn sm" onclick="openEvent('${m.date}','${m.id}')">✎</button><button class="btn sm ghost" onclick="delMeeting('${m.id}')">×</button></div>`;}
 function togMtgDone(id){const m=S.meetings.find(x=>x.id===id);if(!m)return;m.done=!m.done;if(m.done){bigConfetti();toast('Paper complete — +120 XP.');}save();renderCal();renderToday();}
-function delMeeting(id){S.meetings=S.meetings.filter(m=>m.id!==id);save();renderCal();renderToday();}
+function delMeeting(id){const m=S.meetings.find(x=>x.id===id);if(!m)return;const idx=S.meetings.indexOf(m);S.meetings=S.meetings.filter(x=>x.id!==id);save();renderCal();renderToday();
+  softDelete('Event deleted.',()=>{S.meetings.splice(Math.min(idx,S.meetings.length),0,m);save();renderCal();renderToday();});}
+/* ===== mock / paper scores ===== */
+let scoreEdit=null;
+function openScore(id){const m=S.meetings.find(x=>x.id===id);if(!m)return;scoreEdit=id;
+  MD.innerHTML=`<h3 style="margin-bottom:3px">Mock / paper score</h3>
+    <div class="pass-sub">${esc(m.title)} · ${pretty(m.date)}</div>
+    <div class="scoregrid">
+      <div><label>Marks</label><input class="field" id="sc-mk" type="number" min="0" inputmode="numeric" value="${m.score!=null?m.score:''}" placeholder="e.g. 62"></div>
+      <div><label>Out of</label><input class="field" id="sc-of" type="number" min="1" value="${m.outOf||100}"></div>
+      <div><label>Time taken (min)</label><input class="field" id="sc-tm" type="number" min="0" value="${m.timeMin!=null?m.timeMin:''}" placeholder="180"></div>
+    </div>
+    <label>Weak areas to revisit <span style="font-weight:400;color:var(--faint)">— optional</span></label>
+    <input class="field" id="sc-wk" value="${esc(m.weak||'')}" placeholder="e.g. Ind AS 115 step 4, forex hedging">
+    <div class="passhint">Recording a score marks the paper done. Scores drive the mock-trend on the <b>Exam</b> tab — your truest readiness signal. CA Final clears at 40 per paper, 50 aggregate.</div>
+    <div class="actions">${m.score!=null?`<button class="btn ghost" style="margin-right:auto" onclick="clearScore()">Clear score</button>`:''}<button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveScore()">Save</button></div>`;
+  showModal();}
+function saveScore(){const m=S.meetings.find(x=>x.id===scoreEdit);if(!m){closeModal();return;}
+  const mk=parseFloat(document.getElementById('sc-mk').value);
+  const of=parseFloat(document.getElementById('sc-of').value)||100;
+  const tm=parseFloat(document.getElementById('sc-tm').value);
+  if(isNaN(mk)){alert('Enter the marks scored.');return;}
+  m.score=Math.max(0,mk);m.outOf=Math.max(1,of);m.timeMin=isNaN(tm)?null:Math.max(0,tm);
+  m.weak=(document.getElementById('sc-wk').value||'').trim();m.done=true;
+  save();closeModal();renderCal();renderToday();renderExam();bigConfetti();toast('Score saved — '+m.score+'/'+m.outOf+'.');}
+function clearScore(){const m=S.meetings.find(x=>x.id===scoreEdit);if(!m){closeModal();return;}delete m.score;delete m.outOf;delete m.timeMin;delete m.weak;save();closeModal();renderCal();renderToday();renderExam();toast('Score cleared.');}
+function scoredPapers(){return S.meetings.filter(m=>m.kind==='paper'&&m.score!=null).sort((a,b)=>a.date.localeCompare(b.date));}
 function renderUpcoming(){const ty=todayY();const up=S.meetings.filter(m=>m.date>=ty).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||'')).slice(0,8);
   document.getElementById('upcoming').innerHTML=up.length?up.map(m=>`<div class="mtg"><div class="mc" style="background:var(--card2)">${EVGLYPH[m.kind]||'·'}</div><div class="mb"><div class="mt">${esc(m.title)}</div><div class="mm">${pretty(m.date)}${m.time?' · '+fmtT(toMin(m.time)):''}</div></div></div>`).join(''):'<div class="empty">No upcoming events.</div>';}
 
@@ -1763,7 +1937,58 @@ function renderHistory(){if(!document.getElementById('h-from').value){document.g
   document.getElementById('print-head').innerHTML=`<h2 style="font-size:22px;margin-bottom:3px">Anushruti — CA Final Study History</h2><div style="color:#666;margin-bottom:14px">${prettyY(from)} to ${prettyY(to)} · ${rows.length} entries</div>`;
   const tn={task:'Task',stage:'Chapter',paper:'Paper',block:'Block',recall:'Recall',life:'Life',revision:'Revision'},tc={task:'t-task',stage:'t-stage',paper:'t-paper',block:'t-block',recall:'t-recall',life:'t-life',revision:'t-revision'};
   document.getElementById('hist-rows').innerHTML=rows.map(r=>`<tr><td style="white-space:nowrap">${pretty(r.date)}</td><td><span class="typ ${tc[r.type]}">${tn[r.type]}</span></td><td>${esc(r.what)}</td><td style="color:var(--soft)">${esc(r.det)}</td></tr>`).join('');
-  document.getElementById('hist-empty').innerHTML=rows.length?'':'<div class="empty">No entries logged in this range yet.</div>';}
+  document.getElementById('hist-empty').innerHTML=rows.length?'':'<div class="empty">No entries logged in this range yet.</div>';
+  renderInsights();}
+/* ===== insights — turn the logs into a picture (vanilla SVG, no deps) ===== */
+function hoursPerDay(days){const out=[];const ty=todayY();
+  for(let k=days-1;k>=0;k--){const d=addDays(ty,-k);let mins=0;
+    (S.blocks[d]||[]).forEach(b=>{if(b.done)mins+=toMin(b.end)-toMin(b.start);});
+    out.push({date:d,mins});}
+  return out;}
+function recallAccuracy(){const log=S.recallLog||[];let good=0;log.forEach(r=>{if(r.grade==='good'||r.grade==='easy')good++;});
+  return {n:log.length,good,pct:log.length?Math.round(good/log.length*100):0};}
+function fadingChapters(){const m={};(S.recallLog||[]).forEach(r=>{if(r.grade==='forgot'||r.grade==='hard'){const k=r.subject+' · '+r.name;m[k]=(m[k]||0)+1;}});
+  return Object.entries(m).map(([k,v])=>({k,v})).sort((a,b)=>b.v-a.v).slice(0,5);}
+function paceProjection(){const pace=pacePlan();if(!pace.first)return null;
+  if(!pace.remaining)return {done:true,first:pace.first};
+  const rate=pace.rate;// chapters/week recently
+  if(rate<=0)return {stalled:true,remaining:pace.remaining,first:pace.first,days:pace.days};
+  const weeksNeeded=pace.remaining/rate,finish=addDays(todayY(),Math.ceil(weeksNeeded*7));
+  const slack=daysBetween(finish,pace.first);// +ve = finishes before first paper
+  return {finish,slack,remaining:pace.remaining,rate,needPerWk:pace.needPerWk,first:pace.first,days:pace.days};}
+function renderInsights(){const el=document.getElementById('insights');if(!el)return;
+  const hpd=hoursPerDay(21),maxM=Math.max(60,...hpd.map(d=>d.mins));
+  const totalH=Math.round(hpd.reduce((a,d)=>a+d.mins,0)/60*10)/10;
+  const activeDays=hpd.filter(d=>d.mins>0).length;
+  const avgH=activeDays?Math.round(hpd.reduce((a,d)=>a+d.mins,0)/60/activeDays*10)/10:0;
+  const bars=hpd.map(d=>{const h=Math.round(d.mins/maxM*100),isToday=d.date===todayY(),wd=parseY(d.date).getDay();
+    return `<div class="ibar ${d.mins>0?'has':''} ${isToday?'today':''} ${wd===0?'sun':''}" style="--h:${h}%" title="${pretty(d.date)} · ${Math.round(d.mins/60*10)/10}h"></div>`;}).join('');
+  const acc=recallAccuracy(),fade=fadingChapters();
+  const proj=paceProjection();
+  let projHTML='';
+  if(proj){
+    if(proj.done)projHTML=`<div class="ipace ok"><b>Syllabus cleared.</b> Pour the remaining ${daysBetween(todayY(),proj.first)} days into mocks &amp; recall.</div>`;
+    else if(proj.stalled)projHTML=`<div class="ipace behind"><b>No chapters cleared lately.</b> ${proj.remaining} left and ${proj.days}d to the first paper — restart the cadence at ${pacePlan().needPerWk}/week.</div>`;
+    else{const ahead=proj.slack>=0;
+      projHTML=`<div class="ipace ${ahead?'ok':'behind'}">At ≈<b>${proj.rate}/week</b> you'll finish the last of ${proj.remaining} chapters around <b>${pretty(proj.finish)}</b> — ${ahead?`<b>${proj.slack}d before</b>`:`<b>${Math.abs(proj.slack)}d after</b>`} your first paper. ${ahead?'On track — keep it steady.':`Lift to <b>${proj.needPerWk}/week</b> to land safely.`}</div>`;}
+  }
+  el.innerHTML=`
+    <div class="iblock">
+      <div class="ihd"><span>Study hours / day</span><span class="isub">${totalH}h total · ${avgH}h on active days</span></div>
+      <div class="ichart">${bars}</div>
+    </div>
+    ${projHTML}
+    <div class="igrid">
+      <div class="istat-card">
+        <div class="ihd"><span>Recall accuracy</span></div>
+        <div class="idonut" style="--p:${acc.pct}"><span>${acc.n?acc.pct+'%':'—'}</span></div>
+        <div class="iacc-lab">${acc.n?(acc.good+' of '+acc.n+' recalls felt solid (Good / Easy)'):'No recalls logged yet.'}</div>
+      </div>
+      <div class="istat-card">
+        <div class="ihd"><span>Needs another look</span></div>
+        ${fade.length?`<div class="ifade">${fade.map(f=>`<div class="ifrow"><span class="ifn">${esc(f.k)}</span><span class="ifc">${f.v}×</span></div>`).join('')}</div>`:'<div class="iacc-lab">Nothing flagged — chapters are coming back cleanly.</div>'}
+      </div>
+    </div>`;}
 function printHistory(){const v=document.getElementById('v-history');v.classList.add('print-active');window.print();setTimeout(()=>v.classList.remove('print-active'),500);}
 function printToday(){const ty=todayY(),st=studyType(ty),bl=(S.blocks[ty]||[]).slice().sort((a,b)=>toMin(a.start)-toMin(b.start)),tk=S.tasks.filter(t=>t.date===ty),mt=S.meetings.filter(m=>m.date===ty),due=recallDue();
   document.getElementById('print-today-content').innerHTML=`<h2 style="font-size:24px">CA Final — Plan for ${prettyY(ty)}</h2><div style="color:#666;margin:4px 0 16px">${st.note}</div>
@@ -1775,7 +2000,7 @@ function printToday(){const ty=todayY(),st=studyType(ty),bl=(S.blocks[ty]||[]).s
 
 /* ===== export/import ===== */
 function dl(name,c,t){const b=new Blob([c],{type:t}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);}
-function exportJSON(){dl('almanac-backup-'+todayY()+'.json',JSON.stringify(S,null,2),'application/json');}
+function exportJSON(){S.lastBackup=todayY();save();dl('almanac-backup-'+todayY()+'.json',JSON.stringify(S,null,2),'application/json');renderBackupNudge();toast('Backup downloaded.');}
 function exportCSV(){const from=document.getElementById('h-from').value,to=document.getElementById('h-to').value,rows=gather(from,to);
   const csv=[['Date','Type','What','Details']].concat(rows.map(r=>[r.date,r.type,r.what,r.det])).map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
   dl('ca-history-'+from+'_to_'+to+'.csv',csv,'text/csv');}
@@ -1865,6 +2090,23 @@ const CFC=['#b27361','#3f5d7a','#5c8b73','#8f574a','#2c4660'];
 function spawn(n){const root=document.getElementById('cf');for(let i=0;i<n;i++){const c=document.createElement('div');c.className='cfp';c.style.left=Math.random()*100+'vw';c.style.top=(-12-Math.random()*10)+'vh';c.style.background=CFC[i%CFC.length];const d=1.5+Math.random()*1.3;c.style.animation=`fall ${d}s cubic-bezier(.3,.6,.4,1) forwards`;c.style.transform=`rotate(${Math.random()*360}deg)`;c.style.opacity=.9;root.appendChild(c);setTimeout(()=>c.remove(),d*1000+60);}}
 function miniConfetti(){spawn(14);}function bigConfetti(){spawn(64);}
 let toastT;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600);}
+/* ===== undo-able delete ===== */
+let undoToastT=null,pendingUndo=null;
+function ensureUndoEl(){let el=document.getElementById('undo-toast');if(!el){el=document.createElement('div');el.className='toast undo';el.id='undo-toast';document.body.appendChild(el);}return el;}
+function softDelete(msg,restore){pendingUndo=restore;const el=ensureUndoEl();
+  el.innerHTML=`<span>${esc(msg)}</span><button class="undo-btn" onclick="doUndo()">Undo</button>`;
+  el.classList.add('show');clearTimeout(undoToastT);
+  undoToastT=setTimeout(()=>{el.classList.remove('show');pendingUndo=null;},6000);}
+function doUndo(){const el=document.getElementById('undo-toast');if(el)el.classList.remove('show');clearTimeout(undoToastT);if(pendingUndo){const f=pendingUndo;pendingUndo=null;f();toast('Restored.');}}
+/* ===== backup-age nudge (only when sync is off) ===== */
+let backupDismissed=false;
+function dataMeaningful(){return chaptersCleared()>0||(S.recallLog||[]).length>0||(S.meetings||[]).some(m=>m.score!=null)||S.tasks.some(t=>t.done);}
+function backupAgeDays(){return S.lastBackup?daysBetween(S.lastBackup,todayY()):Infinity;}
+function renderBackupNudge(){const el=document.getElementById('backup-banner');if(!el)return;
+  if(backupDismissed||syncOn()||!dataMeaningful()||backupAgeDays()<14){el.innerHTML='';return;}
+  const never=!S.lastBackup;
+  el.innerHTML=`<div class="banner amber"><span>${never?'Your progress lives only in this browser — a cleared cache would wipe it. Keep a safe copy.':'It\u2019s been over two weeks since your last backup. Grab a fresh copy.'}</span><button class="btn sm" onclick="exportJSON()">Back up now</button><button class="btn sm ghost" onclick="dismissBackup()">Later</button></div>`;}
+function dismissBackup(){backupDismissed=true;renderBackupNudge();}
 
 /* ===== sound engine ===== */
 let _AC=null;
@@ -1924,7 +2166,42 @@ function renderExam(){const ty=todayY(),nx=nextExam(),list=examList();
       ${r?`<div class="exmeta"><span><b>${r.done}/${r.tot}</b> chapters</span><span>·</span><span><b>${r.matured}</b> well-retained</span></div>`
          :`<div class="extrk">Not tracked yet — add a “${esc(p.short)}” subject to see readiness.</div>`}
     </div>`;}).join('');
+  renderMockScores();
   renderAchievements();}
+
+/* ===== mock-score trend (SVG sparkline, no deps) ===== */
+function sparkline(vals,w,h,color){if(!vals.length)return'';const pad=4,W=w-pad*2,H=h-pad*2;
+  const max=100,min=0;const n=vals.length;
+  const x=i=>pad+(n===1?W/2:W*i/(n-1)),y=v=>pad+H-(v-min)/(max-min)*H;
+  const pts=vals.map((v,i)=>x(i)+','+y(v));
+  const line=`<polyline fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${pts.join(' ')}"/>`;
+  const area=`<polygon fill="${color}" opacity=".10" points="${pad},${pad+H} ${pts.join(' ')} ${x(n-1)},${pad+H}"/>`;
+  const passY=y(40),aggY=y(50);
+  const guides=`<line x1="${pad}" y1="${passY}" x2="${w-pad}" y2="${passY}" stroke="var(--amber)" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/>`+
+               `<line x1="${pad}" y1="${aggY}" x2="${w-pad}" y2="${aggY}" stroke="var(--green)" stroke-width="1" stroke-dasharray="3 3" opacity=".5"/>`;
+  const dots=vals.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="${i===n-1?3.2:2.2}" fill="${i===n-1?color:'#fff'}" stroke="${color}" stroke-width="1.6"/>`).join('');
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="${h}" preserveAspectRatio="none" style="display:block">${guides}${area}${line}${dots}</svg>`;}
+function renderMockScores(){const el=document.getElementById('mock-scores');if(!el)return;
+  const sp=scoredPapers();const tag=document.getElementById('mock-tag');
+  if(!sp.length){if(tag)tag.textContent='';
+    el.innerHTML='<div class="empty">No mock scores yet. Open a paper on the Calendar or Today tab and tap <b>Score</b> after you sit it — your marks trend will plot here against the 40/50 pass lines.</div>';return;}
+  const pcts=sp.map(scorePct);const avg=Math.round(pcts.reduce((a,b)=>a+b,0)/pcts.length);
+  const best=Math.max(...pcts);const last=pcts[pcts.length-1];
+  const recent=pcts.slice(-3),prior=pcts.slice(0,-3);
+  const trend=(pcts.length>=2)?(last-pcts[pcts.length-2]):0;
+  if(tag)tag.textContent=sp.length+' logged';
+  const rows=sp.slice().reverse().slice(0,8).map(m=>{const pc=scorePct(m);
+    return `<div class="msrow"><span class="msdot ${scoreClass(m)}"></span>
+      <div class="msb"><div class="mst">${esc(m.title)}</div><div class="msm">${pretty(m.date)}${m.timeMin?(' · '+fmtDur(m.timeMin)):''}${m.weak?(' · weak: '+esc(m.weak)):''}</div></div>
+      <div class="msbar"><i class="${scoreClass(m)}" style="width:${pc}%"></i></div>
+      <span class="msval ${scoreClass(m)}">${m.score}/${m.outOf||100}</span></div>`;}).join('');
+  el.innerHTML=`<div class="mssummary">
+      <div class="msstat"><div class="n" style="color:var(--purple-d)">${last}%</div><div class="l">latest ${trend?`<span class="${trend>0?'up':'dn'}">${trend>0?'▲':'▼'}${Math.abs(trend)}</span>`:''}</div></div>
+      <div class="msstat"><div class="n">${avg}%</div><div class="l">average</div></div>
+      <div class="msstat"><div class="n" style="color:var(--green-d)">${best}%</div><div class="l">best</div></div>
+    </div>
+    <div class="msspark">${sparkline(pcts,520,90,'var(--purple)')}<div class="msspark-lab"><span><i style="background:var(--amber)"></i>40 pass</span><span><i style="background:var(--green)"></i>50 aggregate</span></div></div>
+    <div class="mslist">${rows}</div>`;}
 
 /* ===== achievements ===== */
 function blocksDoneStarting(beforeH){let n=0;Object.values(S.blocks).forEach(arr=>arr.forEach(b=>{if(b.done&&toMin(b.start)<beforeH*60)n++;}));return n;}
@@ -2081,7 +2358,7 @@ function spinWheel(){if(spinning)return;spinning=true;const w=document.getElemen
     btn.textContent='Done';btn.disabled=false;btn.onclick=closeModal;spinning=false;},4700);}
 
 /* ===== central post-render hook ===== */
-function afterRender(){renderRecap();renderAchStrip();renderLifeStrip();updSoundBtn();checkLevelTree();checkAchievements();maybeReward();}
+function afterRender(){renderRecap();renderAchStrip();renderLifeStrip();updSoundBtn();checkLevelTree();checkAchievements();renderBackupNudge();maybeReward();}
 
 /* ===== LIFE / personal goals ===== */
 function defaultHabits(){const ty=todayY();return[
@@ -2129,7 +2406,8 @@ function saveHabit(id){const name=document.getElementById('h-name').value.trim()
   if(id){const h=S.habits.find(x=>x.id===id);h.name=name;h.emoji=habitEmoji;h.color=habitColor;h.target=target;h.placeholder=ph;}
   else S.habits.push({id:uid(),name,emoji:habitEmoji,color:habitColor,target,placeholder:ph,createdAt:todayY(),log:[]});
   save();closeModal();renderLife();renderLifeStrip();toast('Goal saved.');}
-function delHabit(id){if(!confirm('Delete this goal and all its logs?'))return;S.habits=(S.habits||[]).filter(h=>h.id!==id);save();closeModal();renderLife();renderLifeStrip();}
+function delHabit(id){const h=(S.habits||[]).find(x=>x.id===id);if(!h)return;const idx=S.habits.indexOf(h);S.habits=S.habits.filter(x=>x.id!==id);save();closeModal();renderLife();renderLifeStrip();
+  softDelete('Goal deleted.',()=>{S.habits.splice(Math.min(idx,S.habits.length),0,h);save();renderLife();renderLifeStrip();});}
 function renderLife(){const el=document.getElementById('life-list');if(!el)return;
   if(!S.habits||!S.habits.length){el.innerHTML='<div class="card"><div class="empty">No personal goals yet. Add one to start tracking.</div></div>';return;}
   const ty=todayY();
@@ -2181,7 +2459,7 @@ function seedProjects(ty){
     ['V','10–15%',['Business Valuation','Mergers, Acquisitions & Corporate Restructuring']],
     ['VI','2–5%',['Startup Finance']],
   ];
-  const build=arr=>arr.flatMap(([section,weight,chs])=>chs.map(name=>({name,section,weight,hot:weightMid(weight)>=20,done:false,doneAt:null,recall:null,passes:[]})));
+  const build=arr=>arr.flatMap(([section,weight,chs])=>chs.map(name=>({name,section,weight,hot:weightMid(weight)>=20,done:false,doneAt:null,recall:null,passes:[],cards:[],mastery:0})));
   return[
     {id:'afm',name:'AFM / SFM',desc:'Paper 2 · Advanced Financial Management. Section II–IV carry the marks — start there.',color:'#b27361',deadline:'2026-06-20',createdAt:ty,stages:build(AFM)},
     {id:'fr',name:'FR',desc:'Paper 1 · Financial Reporting (Ind AS). Section III (Assets) is the heaviest single block.',color:'#3f5d7a',deadline:'2026-07-20',createdAt:ty,stages:build(FR)},
@@ -2243,18 +2521,20 @@ function migrate(){let dirty=false;
     (S.projects||[]).forEach(p=>{if(cm[(p.color||'').toLowerCase()])p.color=cm[p.color.toLowerCase()];});
     (S.habits||[]).forEach(h=>{if(cm[(h.color||'').toLowerCase()])h.color=cm[h.color.toLowerCase()];});
     S.colorMapV=1;dirty=true;}
-  S.projects.forEach(p=>p.stages.forEach(s=>{if(!Array.isArray(s.passes)){s.passes=[];dirty=true;}if(s.section===undefined){s.section=s.section||'I';dirty=true;}if(s.weight===undefined){s.weight='';dirty=true;}
+  S.projects.forEach(p=>p.stages.forEach(s=>{if(!Array.isArray(s.passes)){s.passes=[];dirty=true;}if(!Array.isArray(s.cards)){s.cards=[];dirty=true;}if(s.mastery===undefined){s.mastery=s.done?2:0;dirty=true;}if(s.section===undefined){s.section=s.section||'I';dirty=true;}if(s.weight===undefined){s.weight='';dirty=true;}
     if(s.done&&!s.recall){s.recall={stage:0,due:addDays(s.doneAt||todayY(),1),last:s.doneAt||todayY()};dirty=true;}}));
   if(dirty)save();}
 
 /* ===== init ===== */
 // A brand-new device seeds starter data stamped "now", which could otherwise
-// look newer than your real almanac and overwrite it on first sync. Force the
-// fresh seed to timestamp 0 so genuine cloud data always wins when you connect.
+// look newer than your real almanac and overwrite it on first sync. The first
+// render itself can save (e.g. checkLevelTree initialising its markers), so we
+// zero the fresh seed's timestamp AFTER rendering — last write wins — ensuring
+// genuine cloud data always wins when you connect.
 const __freshDevice=!localStorage.getItem(KEY);
 buildNav();load();seed();migrate();
-if(__freshDevice){S.updatedAt=0;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 applyTheme();renderToday();drawFocus();updSoundBtn();updFocusToday();scheduleReminder();
+if(__freshDevice){S.updatedAt=0;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 if(syncOn())cloudPull();
 window.addEventListener('focus',()=>{focusResync();if(syncOn())cloudPull();});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){focusResync();if(syncOn())cloudPull();}});
