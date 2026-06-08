@@ -610,6 +610,52 @@ input[type=date].field,input[type=time].field{color-scheme:light}
 .mtopbar h1{font-size:20px;font-weight:600;color:var(--ink);letter-spacing:-.015em}
 .mtopbar .sub{font-size:11px;color:var(--faint);letter-spacing:.16em;margin-top:2px;font-weight:500}
 
+/* ===== sync & lock (now on the dashboard) ===== */
+.head .actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.lockbtn{display:inline-grid;place-items:center;padding:0;width:34px;height:34px}
+.lockbtn svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none}
+.synccard .ch{margin-bottom:10px}
+.tag.okpill{background:var(--green-bg);color:var(--green-d);font-weight:700}
+.syncrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.syncmsg{flex:1;min-width:190px;font-size:13px;color:var(--soft);line-height:1.5}
+.syncbtns{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ===== calendar ↔ planner links ===== */
+.evwrap{display:flex;flex-direction:column;gap:3px}
+.ev.plan{background:var(--amber-bg);color:var(--amber-d)}
+.ev.task{background:var(--card2);color:var(--ink)}
+.evdots{display:none;gap:3px;flex-wrap:wrap;margin-top:auto;padding-top:3px}
+.evdot{width:6px;height:6px;border-radius:50%;flex:none}
+.evdot.paper,.evdot.recall{background:var(--pink)}
+.evdot.milestone{background:var(--purple)}
+.evdot.event{background:var(--green)}
+.evdot.plan{background:var(--amber)}
+.evdot.task{background:var(--soft)}
+.cal-day-sec{margin-top:13px}
+.cal-day-sec .lab{font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:6px}
+
+/* ===== mobile polish: dashboard + calendar ===== */
+@media(max-width:620px){
+  .cd{padding:17px 17px}
+  .cd .wkpt{gap:8px}
+  .wkpt .wp .n{font-size:19px}
+  .exsched{gap:5px}
+  .expill{min-width:42px;padding:4px 7px}
+  .stat{padding:13px 14px}
+}
+@media(max-width:560px){
+  .cal{gap:4px}
+  .cal-bar{gap:7px}
+  .cal-bar h3{font-size:17px;min-width:0;flex:1;text-align:center}
+  .dow{font-size:8.5px}
+  .cell{min-height:48px;padding:4px 4px;border-radius:9px;gap:2px}
+  .cell .dn{font-size:11px}
+  .cell .evwrap{display:none}      /* hide text bars on small screens… */
+  .cell .evdots{display:flex}      /* …show compact dots; tap a day for the full list */
+  .cell .more{display:none}
+  .syncbtns .btn{flex:1}
+}
+
 @media print{
   body{background:#fff;color:#000}.rail,.tabbar,.mtopbar,.head .actions,.hist-bar,.no-print,.banner,.addrow,.tt-bar .btn,#cf,.toast{display:none!important}
   main{max-width:100%;padding:0}.view{display:none!important}.view.print-active{display:block!important}
@@ -831,7 +877,7 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
     <div class="gsub">Enter your password to continue.</div>
     <input id="gate-input" class="field" type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')gateUnlock()">
     <button class="btn primary" onclick="gateUnlock()">Unlock</button>
-    <label class="gremember"><input type="checkbox" id="gate-remember" checked>Remember me on this device</label>
+    <label class="gremember"><input type="checkbox" id="gate-remember">Keep me signed in on this device</label>
     <div id="gate-err">Incorrect password — try again.</div>
   </div>
 </div>
@@ -881,7 +927,7 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
     <section class="view on" id="v-today">
       <div class="head">
         <div class="title"><h2 id="greet">Good day, Anushruti</h2><div class="sub" id="today-sub"></div></div>
-        <div class="actions"><span class="themeswitch" title="Theme"><button data-t="graphite" onclick="setTheme('graphite')" style="background:#3f5d7a" title="Graphite"></button><button data-t="oxford" onclick="setTheme('oxford')" style="background:#26374d" title="Oxford"></button><button data-t="sandstone" onclick="setTheme('sandstone')" style="background:#b15c46" title="Sandstone"></button></span><button class="btn sm snd-btn" id="snd-btn" onclick="toggleSound()" title="Sound on/off"><span class="ic" id="snd-ic"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 8.5a4 4 0 0 1 0 7M18.7 6a7 7 0 0 1 0 12"/></svg></span></button><button class="btn" onclick="printToday()">Print today</button></div>
+        <div class="actions"><span class="themeswitch" title="Theme"><button data-t="graphite" onclick="setTheme('graphite')" style="background:#3f5d7a" title="Graphite"></button><button data-t="oxford" onclick="setTheme('oxford')" style="background:#26374d" title="Oxford"></button><button data-t="sandstone" onclick="setTheme('sandstone')" style="background:#b15c46" title="Sandstone"></button></span><button class="btn sm snd-btn" id="snd-btn" onclick="toggleSound()" title="Sound on/off"><span class="ic" id="snd-ic"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16 8.5a4 4 0 0 1 0 7M18.7 6a7 7 0 0 1 0 12"/></svg></span></button><button class="btn sm lockbtn" onclick="lockNow()" title="Lock the almanac" aria-label="Lock the almanac"><svg viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg></button><button class="btn" onclick="printToday()">Print today</button></div>
       </div>
       <div id="next-move"></div>
       <div class="hero">
@@ -947,6 +993,7 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
           </div>
         </div>
       </div>
+      <div id="sync-card" class="no-print"></div>
     </section>
 
     <!-- RECALL -->
@@ -994,7 +1041,7 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
 
     <!-- TIMETABLE -->
     <section class="view" id="v-timetable">
-      <div class="head"><div class="title"><h2>Timetable</h2><div class="sub">Block your day — morning deep work, night consolidation, Saturday papers</div></div></div>
+      <div class="head"><div class="title"><h2>Plan</h2><div class="sub">Block your day, and track tasks that roll forward until done</div></div></div>
       <div class="card">
         <div class="tt-bar">
           <button class="btn sm" onclick="shiftTT(-1)">‹</button>
@@ -1014,14 +1061,9 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
           <span><i style="background:var(--faint)"></i>Break</span>
         </div>
       </div>
-    </section>
-
-    <!-- TODO -->
-    <section class="view" id="v-todo">
-      <div class="head"><div class="title"><h2>To-Do</h2><div class="sub">Unfinished tasks roll forward until they're done</div></div></div>
       <div id="todo-carry"></div>
       <div class="card">
-        <div class="ch"><h3>Open tasks</h3><span class="tag" id="todo-open-count"></span></div>
+        <div class="ch"><h3>To-do · open tasks</h3><span class="tag" id="todo-open-count"></span></div>
         <div id="todo-open"></div>
         <div class="addrow">
           <input class="field grow" id="td-text" placeholder="New task…">
@@ -1043,7 +1085,7 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
 
     <!-- CALENDAR -->
     <section class="view" id="v-calendar">
-      <div class="head"><div class="title"><h2>Calendar</h2><div class="sub">Papers, milestones, recall due-dates &amp; anything you add</div></div></div>
+      <div class="head"><div class="title"><h2>Calendar</h2><div class="sub">Papers, milestones, recall due-dates, study blocks &amp; to-dos — tap a day for the full list</div></div></div>
       <div class="card">
         <div class="cal-bar">
           <button class="btn sm" onclick="shiftMonth(-1)">‹</button>
@@ -1078,7 +1120,6 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
           <button class="btn sm" onclick="exportJSON()">Backup</button>
           <button class="btn sm" onclick="document.getElementById('imp').click()">Restore</button>
           <input type="file" id="imp" accept="application/json" style="display:none" onchange="importJSON(event)">
-          <button class="btn sm" onclick="openSync()">Sync…</button>
         </div>
         <div class="print-only" id="print-head"></div>
         <div id="hist-summary" style="margin-bottom:14px"></div>
@@ -1105,7 +1146,7 @@ const IC={
   life:'<svg viewBox="0 0 24 24"><path d="M12 3l2.1 5.2L19.5 9l-4.3 3.1L16.5 18 12 14.8 7.5 18l1.3-5.9L4.5 9l5.4-.8z"/></svg>'
 };
 const NAVITEMS=[
-  ['today','Today'],['exam','Exam'],['recall','Recall'],['timetable','Timetable'],['todo','To-Do'],
+  ['today','Today'],['exam','Exam'],['recall','Recall'],['timetable','Plan'],
   ['projects','Subjects'],['life','Life'],['calendar','Calendar'],['history','History']
 ];
 
@@ -1118,12 +1159,21 @@ const NAVITEMS=[
    └─────────────────────────────────────────────────────────────┘ */
 const PASSWORD = 'anu';
 
-const GATE_KEY='almanac_gate_ok';
+const GATE_KEY='almanac_gate_ok';            // permanent "keep me signed in on this device"
+const GATE_SESSION='almanac_gate_session';   // unlocked for THIS run of the app only
+function gateRemembered(){try{return localStorage.getItem(GATE_KEY)===PASSWORD;}catch(e){return false;}}
+function gateSessionOK(){try{return sessionStorage.getItem(GATE_SESSION)==='1';}catch(e){return false;}}
 function gateUnlock(){
   const inp=document.getElementById('gate-input');
   if((inp.value||'')===PASSWORD){
-    try{ if(document.getElementById('gate-remember').checked) localStorage.setItem(GATE_KEY,PASSWORD); }catch(e){}
+    try{ sessionStorage.setItem(GATE_SESSION,'1'); }catch(e){}
+    try{
+      if(document.getElementById('gate-remember').checked) localStorage.setItem(GATE_KEY,PASSWORD);
+      else localStorage.removeItem(GATE_KEY);
+    }catch(e){}
     document.getElementById('gate').style.display='none';
+    document.getElementById('gate-err').style.display='none';
+    inp.value='';
     document.body.style.overflow='';
   }else{
     document.getElementById('gate-err').style.display='block';
@@ -1132,9 +1182,20 @@ function gateUnlock(){
     c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
   }
 }
+// Lock on demand: forget the saved unlock (this device + this session) and show the gate again.
+function lockNow(){
+  try{ localStorage.removeItem(GATE_KEY); }catch(e){}
+  try{ sessionStorage.removeItem(GATE_SESSION); }catch(e){}
+  const g=document.getElementById('gate'); if(!g)return;
+  const r=document.getElementById('gate-remember'); if(r)r.checked=false;
+  const er=document.getElementById('gate-err'); if(er)er.style.display='none';
+  g.style.display='flex';
+  document.body.style.overflow='hidden';
+  const i=document.getElementById('gate-input'); if(i){ i.value=''; setTimeout(()=>i.focus(),60); }
+}
 (function checkGate(){
-  let ok=false; try{ ok=localStorage.getItem(GATE_KEY)===PASSWORD; }catch(e){}
-  if(ok){ document.getElementById('gate').style.display='none'; }
+  // Stay open if it's a remembered device OR already unlocked this session; otherwise require the password.
+  if(gateRemembered()||gateSessionOK()){ document.getElementById('gate').style.display='none'; }
   else{ document.body.style.overflow='hidden'; setTimeout(()=>{const i=document.getElementById('gate-input');if(i)i.focus();},60); }
 })();
 
@@ -1230,13 +1291,13 @@ function syncSave(){
     if(url)localStorage.setItem(GAS_URL_KEY,url);else localStorage.removeItem(GAS_URL_KEY);
     if(sec)localStorage.setItem(GAS_SECRET_KEY,sec);else localStorage.removeItem(GAS_SECRET_KEY);
   }catch(e){alert('Could not save — this browser is blocking storage.');return;}
-  warnedAuth=false;closeModal();
+  warnedAuth=false;closeModal();renderSyncCard();
   if(syncOn()){toast('Sync on for this device.');cloudPull();}
   else toast('Sync is off.');
 }
 function syncDisconnect(){
   try{localStorage.removeItem(GAS_URL_KEY);localStorage.removeItem(GAS_SECRET_KEY);}catch(e){}
-  warnedAuth=false;closeModal();toast('Sync disconnected on this device.');
+  warnedAuth=false;closeModal();renderSyncCard();toast('Sync disconnected on this device.');
 }
 async function syncTest(){
   const url=(document.getElementById('sy-url').value||'').trim();
@@ -1253,6 +1314,24 @@ async function syncTest(){
     const d=await r.json();
     st.innerHTML=(d&&d.updatedAt)?'\u2713 Connected — found your saved almanac.':'\u2713 Connected — no data saved yet; it will be created on first save.';
   }catch(e){st.textContent='Could not reach the script — check the URL and that access is “Anyone”.';}
+}
+/* Dashboard sync & backup card (sync now lives on Today instead of History). */
+function renderSyncCard(){
+  const el=document.getElementById('sync-card');if(!el)return;
+  const on=syncOn();
+  el.innerHTML=`<div class="card synccard">
+    <div class="ch"><h3>Sync &amp; backup</h3><span class="tag ${on?'okpill':''}">${on?'✓ Synced':'This device only'}</span></div>
+    <div class="syncrow">
+      <div class="syncmsg">${on
+        ?'Your almanac keeps in step across your phone, laptop and tablet via your own Google account.'
+        :'Turn on sync to keep this almanac in step on every device — or just keep a backup file safe.'}</div>
+      <div class="syncbtns">
+        <button class="btn primary sm" onclick="openSync()">${on?'Sync settings':'Set up sync'}</button>
+        <button class="btn sm" onclick="exportJSON()">Back up</button>
+        <button class="btn sm" onclick="document.getElementById('imp').click()">Restore</button>
+      </div>
+    </div>
+  </div>`;
 }
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
@@ -1297,11 +1376,15 @@ function buildNav(){
 }
 function navClick(e){const b=e.target.closest('button');if(!b)return;goView(b.dataset.v);}
 function goView(v){
+  if(v==='todo')v='timetable'; // to-do is now merged into the Plan view
   document.querySelectorAll('#nav button,#tabbar button').forEach(x=>x.classList.toggle('on',x.dataset.v===v));
-  document.querySelectorAll('.view').forEach(s=>s.classList.remove('on'));document.getElementById('v-'+v).classList.add('on');
-  ({today:renderToday,recall:renderRecall,timetable:renderTT,todo:renderTodo,projects:renderProjects,calendar:renderCal,history:renderHistory,exam:renderExam,life:renderLife}[v])();
+  document.querySelectorAll('.view').forEach(s=>s.classList.remove('on'));
+  const sec=document.getElementById('v-'+v);if(sec)sec.classList.add('on');
+  const fn=({today:renderToday,recall:renderRecall,timetable:renderPlanner,projects:renderProjects,calendar:renderCal,history:renderHistory,exam:renderExam,life:renderLife})[v];
+  if(fn)fn();
   window.scrollTo({top:0,behavior:'smooth'});
 }
+function renderPlanner(){renderTT();renderTodo();} // Plan view = timetable + to-dos
 function setBadges(){const due=recallDue().length;
   document.querySelectorAll('[data-badge="recall"]').forEach(b=>{b.style.display=due?'grid':'none';b.textContent=due;});}
 
@@ -1334,7 +1417,8 @@ function computeStreak(){const set=activeDates();let cur=todayY(),n=0;
     else break;
   }
   return n;}
-function computeHours(){let m=0;Object.values(S.blocks).forEach(arr=>arr.forEach(b=>{if(b.done)m+=toMin(b.end)-toMin(b.start);}));return Math.round(m/60*10)/10;}
+function focusLooseMin(){return (S.focusLog||[]).reduce((m,f)=>m+(f.blockId?0:(f.min||0)),0);} // focus not tied to a block
+function computeHours(){let m=0;Object.values(S.blocks).forEach(arr=>arr.forEach(b=>{if(b.done)m+=toMin(b.end)-toMin(b.start);}));m+=focusLooseMin();return Math.round(m/60*10)/10;}
 function chaptersCleared(){return S.projects.reduce((a,p)=>a+p.stages.filter(s=>s.done).length,0);}
 function papersDone(){return S.meetings.filter(m=>m.kind==='paper'&&m.done).length;}
 
@@ -1502,6 +1586,7 @@ function renderToday(){
   document.getElementById('today-mtg').innerHTML=mt.length?mt.map(mtgRow).join(''):'<div class="empty">Nothing scheduled today.</div>';
   document.getElementById('today-todo-count').textContent=doneT+'/'+tToday.length;
   document.getElementById('today-todo').innerHTML=tToday.length?tToday.map(taskRow).join(''):'<div class="empty">Add your first task below.</div>';
+  renderSyncCard();
   setBadges();
   afterRender();
 }
@@ -1865,17 +1950,35 @@ function renderCal(){document.getElementById('cal-title').textContent=MO[calM]+'
   for(let i=0;i<sd;i++)html+='<div class="cell muted"></div>';
   for(let d=1;d<=days;d++){const ds=ymd(new Date(calY,calM,d)),isSun=parseY(ds).getDay()===0;
     const evs=S.meetings.filter(m=>m.date===ds).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
-    let ev=evs.slice(0,2).map(m=>`<div class="ev ${m.kind} ${m.done?'done':''}" title="${esc(m.title)}">${esc(m.title)}</div>`).join('');
-    if(rmap[ds])ev+=`<div class="ev recall" title="Chapters due for recall">↺ ${rmap[ds]} recall</div>`;
-    const extra=evs.length-2;if(extra>0)ev+=`<div class="more">+${extra} more</div>`;
-    html+=`<div class="cell ${isSun?'sun':''} ${ds===ty?'today':''}" onclick="selectDay('${ds}')"><div class="dn">${d}</div>${ev}</div>`;}
+    const tasks=S.tasks.filter(t=>t.date===ds),topen=tasks.filter(t=>!t.done).length;
+    const blocks=S.blocks[ds]||[],bMin=blocks.reduce((a,b)=>a+(toMin(b.end)-toMin(b.start)),0),bH=Math.round(bMin/60*10)/10;
+    // text bars (wider screens)
+    let bars=evs.slice(0,2).map(m=>`<div class="ev ${m.kind} ${m.done?'done':''}" title="${esc(m.title)}">${esc(m.title)}</div>`).join('');
+    if(rmap[ds])bars+=`<div class="ev recall" title="Chapters due for recall">↺ ${rmap[ds]} recall</div>`;
+    if(blocks.length)bars+=`<div class="ev plan" title="${blocks.length} study block${blocks.length>1?'s':''} · ${bH}h scheduled">▦ ${bH}h</div>`;
+    if(tasks.length)bars+=`<div class="ev task" title="${topen} open / ${tasks.length} task${tasks.length>1?'s':''} due">${topen>0?('☑ '+topen+' to-do'):'✓ tasks'}</div>`;
+    const extra=evs.length-2;if(extra>0)bars+=`<div class="more">+${extra} more</div>`;
+    // compact dots (small screens) — tap the day for the full list
+    let dots=evs.slice(0,3).map(m=>`<span class="evdot ${m.kind}"></span>`).join('');
+    if(rmap[ds])dots+='<span class="evdot recall"></span>';
+    if(blocks.length)dots+='<span class="evdot plan"></span>';
+    if(topen>0)dots+='<span class="evdot task"></span>';
+    html+=`<div class="cell ${isSun?'sun':''} ${ds===ty?'today':''}" onclick="selectDay('${ds}')"><div class="dn">${d}</div><div class="evwrap">${bars}</div><div class="evdots">${dots}</div></div>`;}
   document.getElementById('cal-grid').innerHTML=html;renderUpcoming();if(calSel)selectDay(calSel,true);}
+function openPlanDay(ds){ttDate=ds;goView('timetable');} // jump from the calendar into that day's plan
 function shiftMonth(n){calM+=n;if(calM<0){calM=11;calY--;}if(calM>11){calM=0;calY++;}renderCal();}
 function goCalToday(){const d=new Date();calM=d.getMonth();calY=d.getFullYear();renderCal();}
 function selectDay(ds,keep){calSel=ds;const p=document.getElementById('cal-day-panel');p.style.display='block';
   const mt=S.meetings.filter(m=>m.date===ds).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
   const rec=[];S.projects.forEach(pr=>pr.stages.forEach(s=>{if(s.done&&s.recall&&s.recall.due===ds)rec.push({name:s.name,subject:pr.name,color:pr.color});}));
-  p.innerHTML=`<div class="ch"><h3>${prettyY(ds)}</h3><button class="btn sm primary" onclick="openEvent('${ds}')">+ Add</button></div>${mt.length?mt.map(mtgRow).join(''):''}${rec.length?`<div style="margin-top:6px">${rec.map(r=>`<div class="mini"><div class="mt" style="width:auto;color:${r.color}">↺ recall</div><div style="flex:1"><div class="ml">${esc(r.name)}</div><div class="ms">${esc(r.subject)}</div></div></div>`).join('')}</div>`:''}${(!mt.length&&!rec.length)?'<div class="empty">Nothing here yet.</div>':''}`;
+  const dtasks=S.tasks.filter(t=>t.date===ds);
+  const blk=(S.blocks[ds]||[]).slice().sort((a,b)=>toMin(a.start)-toMin(b.start));
+  const mtHtml=mt.length?`<div class="cal-day-sec"><div class="lab">Events</div>${mt.map(mtgRow).join('')}</div>`:'';
+  const blkHtml=blk.length?`<div class="cal-day-sec"><div class="lab">Study blocks <a href="#" onclick="openPlanDay('${ds}');return false" style="float:right;text-transform:none;letter-spacing:0;font-weight:600;color:var(--purple-d)">Open in Plan →</a></div>${blk.map(b=>`<div class="mini"><div class="mt">${fmtT(toMin(b.start))}</div><div style="flex:1"><div class="ml">${b.done?'✓ ':''}${esc(b.label)}</div><div class="ms">${fmtT(toMin(b.start))}–${fmtT(toMin(b.end))} · ${b.type}</div></div></div>`).join('')}</div>`:'';
+  const taskHtml=dtasks.length?`<div class="cal-day-sec"><div class="lab">To-do due</div>${dtasks.map(taskRow).join('')}</div>`:'';
+  const recHtml=rec.length?`<div class="cal-day-sec"><div class="lab">Active recall due</div>${rec.map(r=>`<div class="mini"><div class="mt" style="width:auto;color:${r.color}">↺</div><div style="flex:1"><div class="ml">${esc(r.name)}</div><div class="ms">${esc(r.subject)}</div></div></div>`).join('')}</div>`:'';
+  const nothing=(!mt.length&&!rec.length&&!dtasks.length&&!blk.length)?'<div class="empty">Nothing here yet.</div>':'';
+  p.innerHTML=`<div class="ch"><h3>${prettyY(ds)}</h3><button class="btn sm primary" onclick="openEvent('${ds}')">+ Add</button></div>${mtHtml}${blkHtml}${taskHtml}${recHtml}${nothing}`;
   if(!keep)p.scrollIntoView({behavior:'smooth',block:'nearest'});}
 function fmtDur(min){min=Math.round(min||0);if(!min)return'';const h=Math.floor(min/60),m=min%60;return h?(h+'h'+(m?String(m).padStart(2,'0'):'')):(m+'m');}
 function scorePct(m){return (m&&m.score!=null&&m.outOf)?Math.round(m.score/m.outOf*100):null;}
@@ -2298,7 +2401,7 @@ let focusTotal=1500,focusLeft=1500,focusRun=false,focusInt=null,focusBlockId=nul
 function toggleFocusPanel(){const ac=audio();if(ac&&ac.state==='suspended')ac.resume();document.getElementById('focus-panel').classList.toggle('on');updFocusToday();}
 function focusTodayMin(){const ty=todayY();return (S.focusLog||[]).filter(f=>f.date===ty).reduce((a,f)=>a+(f.min||0),0);}
 function updFocusToday(){const el=document.getElementById('focus-today');if(!el)return;const m=focusTodayMin();
-  if(m){el.innerHTML='<span><b>'+m+'</b> min focused today</span>';el.style.display='block';}else{el.innerHTML='';el.style.display='none';}}
+  if(m){el.innerHTML='<span><b>'+m+'</b> min focused today · adds to hours logged</span>';el.style.display='block';}else{el.innerHTML='';el.style.display='none';}}
 function setFocusPreset(min,btn){if(focusRun)return;document.querySelectorAll('#focus-presets button').forEach(b=>b.classList.toggle('on',b===btn));focusTotal=min*60;focusLeft=min*60;focusBlockId=null;focusLabel='';document.getElementById('focus-lab').textContent='Ready · '+min+' min';drawFocus();}
 function fmtClock(s){const m=Math.floor(s/60),ss=s%60;return m+':'+String(ss).padStart(2,'0');}
 function drawFocus(){const tEl=document.getElementById('focus-time');if(!tEl)return;tEl.textContent=fmtClock(focusLeft);
