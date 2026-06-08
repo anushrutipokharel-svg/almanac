@@ -636,6 +636,105 @@ input[type=date].field,input[type=time].field{color-scheme:light}
 #gate-err{display:none;color:var(--pink-d);font-size:12.5px;margin-top:12px;font-weight:600}
 @keyframes gshake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
 #gate-card.shake{animation:gshake .5s}
+
+/* ============================================================
+   PREMIUM POLISH LAYER — refinement on top of the design system.
+   Additive only; inherits every theme via the existing variables.
+   ============================================================ */
+:root{
+  --ease:cubic-bezier(.22,.61,.36,1);        /* gentle, expensive-feeling */
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --radius-lg:20px;
+  /* layered, ink-toned depth — replaces the flatter single shadow */
+  --shadow:0 1px 1.5px rgba(20,28,38,.05),0 6px 16px -10px rgba(18,30,44,.18),0 22px 48px -30px rgba(18,30,44,.20);
+  --shadow-soft:0 1px 1.5px rgba(20,28,38,.04),0 10px 30px -18px rgba(18,30,44,.20);
+  --shadow-pop:0 2px 4px rgba(20,28,38,.06),0 16px 32px -14px rgba(18,30,44,.24),0 40px 70px -40px rgba(18,30,44,.22);
+}
+html{scroll-behavior:smooth}
+body{text-rendering:optimizeLegibility;font-feature-settings:"kern" 1,"liga" 1,"calt" 1;}
+h1,h2,h3,.serif{font-feature-settings:"kern" 1,"liga" 1,"dlig" 1;}
+/* numerals that change shouldn't reflow — tabular, lining figures */
+.cd .big,#cd-days,.lvlcard .n,.streakcard .n,.stat .n,.wkpt .wp .n,#xptx,.ftime,#focus-time,.ring span,.htable td,.sp-num{
+  font-variant-numeric:tabular-nums lining-nums;font-feature-settings:"tnum" 1,"lnum" 1;}
+
+/* —— tactility: buttons —— */
+.btn{transition:transform .18s var(--ease),box-shadow .22s var(--ease),background .18s var(--ease),border-color .18s var(--ease),color .18s var(--ease);box-shadow:0 1px 1px rgba(20,28,38,.03)}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0) scale(.985);transition-duration:.05s}
+.btn.primary{background:linear-gradient(180deg,color-mix(in srgb,var(--brand) 92%,#fff),var(--brand));box-shadow:0 1px 1px rgba(20,28,38,.06),0 8px 18px -10px color-mix(in srgb,var(--brand) 55%,transparent)}
+.btn.primary:hover{box-shadow:0 2px 3px rgba(20,28,38,.08),0 12px 24px -10px color-mix(in srgb,var(--brand) 60%,transparent)}
+.btn.pink{background:linear-gradient(180deg,color-mix(in srgb,var(--pink) 92%,#fff),var(--pink));box-shadow:0 1px 1px rgba(20,28,38,.06),0 8px 18px -10px color-mix(in srgb,var(--pink) 55%,transparent)}
+button:focus-visible,.btn:focus-visible,a:focus-visible{outline:2px solid color-mix(in srgb,var(--purple) 70%,transparent);outline-offset:2px;border-radius:11px}
+
+/* —— inputs —— */
+.field{transition:border-color .18s var(--ease),box-shadow .18s var(--ease),background .18s var(--ease);caret-color:var(--purple-d)}
+.field:hover{border-color:color-mix(in srgb,var(--purple) 30%,var(--line))}
+.field:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--purple) 16%,transparent)}
+
+/* —— surfaces: layered depth + considered hover —— */
+.card,.pcard,.stat,.lvlcard,.streakcard,.cd,.garden,.nextmove{box-shadow:var(--shadow)}
+.card,.pcard{transition:box-shadow .3s var(--ease),border-color .3s var(--ease),transform .3s var(--ease)}
+.card:hover,.pcard:hover{box-shadow:var(--shadow-pop);border-color:color-mix(in srgb,var(--ink) 12%,var(--line))}
+.modal{box-shadow:0 4px 10px rgba(18,24,32,.10),0 40px 90px -30px rgba(18,28,40,.50)}
+.focus-panel{box-shadow:0 4px 10px rgba(18,24,32,.10),0 40px 90px -28px rgba(18,28,40,.48)}
+
+/* —— small interactive cards lift on hover —— */
+.stat,.expill,.ach,.sprint-cta,.lifecard{transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease)}
+.sprint-cta:hover{transform:translateY(-2px);box-shadow:var(--shadow-pop)}
+.stat:hover{transform:translateY(-2px)}
+
+/* —— motion: orchestrated entrance with a gentle stagger —— */
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.view.on{animation:none}                 /* defer to the staggered children below */
+.view.on>*{animation:rise .5s var(--ease-out) both}
+.view.on>*:nth-child(1){animation-delay:.02s}
+.view.on>*:nth-child(2){animation-delay:.06s}
+.view.on>*:nth-child(3){animation-delay:.10s}
+.view.on>*:nth-child(4){animation-delay:.14s}
+.view.on>*:nth-child(5){animation-delay:.18s}
+.view.on>*:nth-child(n+6){animation-delay:.20s}
+.nav button,.tabbar button{transition:background .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease),box-shadow .18s var(--ease)}
+.nav button:hover{transform:none}
+
+/* —— focus ring numerals + arc easing —— */
+#focus-arc{transition:stroke-dashoffset .5s linear}
+.focus-ring .ftime{letter-spacing:-.01em}
+
+/* —— new: focused-today readout in the timer panel —— */
+.focus-today{display:none;text-align:center;margin-top:12px;padding-top:11px;border-top:1px dashed var(--line);font-size:12px;color:var(--soft)}
+.focus-today span{font-weight:600;color:var(--green-d)}
+.focus-today span b{font-family:'Fraunces',serif;font-size:13.5px}
+
+/* —— new: exam pacing line on the countdown card —— */
+.cd-pace{display:none;margin-top:13px;padding:9px 12px;border-radius:11px;font-size:12px;line-height:1.45;background:color-mix(in srgb,var(--card2) 70%,transparent);border:1px solid var(--line);color:var(--soft)}
+.cd-pace.show{display:block}
+.cd-pace b{color:var(--ink);font-weight:700}
+.cd-pace .cp-rate{color:var(--faint)}
+.cd-pace.behind{background:var(--amber-bg);border-color:color-mix(in srgb,var(--amber) 30%,var(--line))}
+.cd-pace.behind b{color:var(--amber-d)}
+.cd-pace.ok{background:var(--green-bg);border-color:color-mix(in srgb,var(--green) 26%,var(--line))}
+.cd-pace.ok b{color:var(--green-d)}
+
+/* —— premium scrollbar (desktop) —— */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ink) 22%,transparent) transparent}
+*::-webkit-scrollbar{width:11px;height:11px}
+*::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--ink) 20%,transparent);border-radius:99px;border:3px solid transparent;background-clip:content-box}
+*::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--ink) 36%,transparent);background-clip:content-box}
+*::-webkit-scrollbar-track{background:transparent}
+
+/* —— gate: a more deliberate first impression —— */
+#gate-card{box-shadow:0 4px 12px rgba(18,24,32,.12),0 50px 100px -34px rgba(18,28,40,.55);animation:gateIn .6s var(--ease-out) both}
+@keyframes gateIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}
+
+/* —— paper grain: faint tactile texture over the whole canvas —— */
+body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;opacity:.022;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:160px 160px}
+
+/* —— honour reduced-motion —— */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .btn:hover,.stat:hover,.sprint-cta:hover{transform:none}
+}
 </style>
 </head>
 <body>
@@ -672,6 +771,7 @@ input[type=date].field,input[type=time].field{color-scheme:light}
     <button class="btn primary" id="focus-go" onclick="focusStartPause()">Start</button>
     <button class="btn" onclick="focusReset()">Reset</button>
   </div>
+  <div class="focus-today" id="focus-today"></div>
 </div>
 <div class="shell">
   <aside class="rail no-print">
@@ -706,6 +806,7 @@ input[type=date].field,input[type=time].field{color-scheme:light}
           <div class="ex" id="cd-ex"></div>
           <div class="exsched" id="cd-sched"></div>
           <div class="wkpt" id="cd-wk"></div>
+          <div class="cd-pace" id="cd-pace"></div>
         </div>
         <div class="garden" id="garden"></div>
       </div>
@@ -1115,19 +1216,41 @@ function computeXP(){let xp=0;
   S.meetings.forEach(m=>{if(m.done)xp+=120;});
   Object.values(S.blocks).forEach(arr=>arr.forEach(b=>{if(b.done)xp+=15;}));
   (S.recallLog||[]).forEach(()=>xp+=10);
+  (S.focusLog||[]).forEach(f=>{xp+=Math.max(1,Math.round((f.min||0)/25))*6;});
   return xp;}
 function activeDates(){const set=new Set();
   Object.entries(S.blocks).forEach(([d,arr])=>{if(arr.some(b=>b.done))set.add(d);});
   S.tasks.forEach(t=>{if(t.done&&t.doneAt)set.add(t.doneAt);});
   S.projects.forEach(p=>p.stages.forEach(s=>{if(s.done&&s.doneAt)set.add(s.doneAt);}));
   (S.recallLog||[]).forEach(r=>set.add(r.date));
+  (S.focusLog||[]).forEach(f=>{if(f.date)set.add(f.date);});
   return set;}
+function isRestDay(s){return parseY(s).getDay()===0;} // Sunday = designated rest/buffer day
 function computeStreak(){const set=activeDates();let cur=todayY(),n=0;
-  if(!set.has(cur)){cur=addDays(cur,-1);if(!set.has(cur))return 0;}
-  while(set.has(cur)){n++;cur=addDays(cur,-1);}return n;}
+  // Haven't logged anything yet today? Don't penalise — start the walk from yesterday.
+  if(!set.has(cur))cur=addDays(cur,-1);
+  // Walk back: active days count; empty rest days bridge the chain; any other empty day ends it.
+  while(true){
+    if(set.has(cur)){n++;cur=addDays(cur,-1);}
+    else if(isRestDay(cur)){cur=addDays(cur,-1);}
+    else break;
+  }
+  return n;}
 function computeHours(){let m=0;Object.values(S.blocks).forEach(arr=>arr.forEach(b=>{if(b.done)m+=toMin(b.end)-toMin(b.start);}));return Math.round(m/60*10)/10;}
 function chaptersCleared(){return S.projects.reduce((a,p)=>a+p.stages.filter(s=>s.done).length,0);}
 function papersDone(){return S.meetings.filter(m=>m.kind==='paper'&&m.done).length;}
+
+/* ===== exam pacing — how many chapters/week to finish the syllabus before exams ===== */
+function chaptersRemaining(){return S.projects.reduce((a,p)=>a+p.stages.filter(s=>!s.done).length,0);}
+function clearedLastDays(n){const from=addDays(todayY(),-(n-1));let c=0;
+  S.projects.forEach(p=>p.stages.forEach(s=>{if(s.done&&s.doneAt&&s.doneAt>=from)c++;}));return c;}
+function pacePlan(){const ty=todayY();
+  const first=examList().reduce((m,p)=>(p.date>=ty&&(!m||p.date<m)?p.date:m),null);
+  const days=first?Math.max(0,daysBetween(ty,first)):0,weeks=Math.max(1,days/7);
+  const remaining=chaptersRemaining();
+  const needPerWk=remaining>0?Math.ceil(remaining/weeks):0;
+  const rate=Math.round(clearedLastDays(14)/2*10)/10; // chapters/week, last 2 weeks
+  return {first,days,remaining,needPerWk,rate};}
 
 /* ===== weighted readiness ===== */
 function weightMid(band){if(!band)return 8;const s=String(band);const r=s.match(/(\d+)\s*[^\d]+\s*(\d+)/);if(r)return(+r[1]+ +r[2])/2;const one=s.match(/(\d+)/);return one?+one[1]:8;}
@@ -1232,6 +1355,15 @@ function renderToday(){
     `<div class="wp"><div class="n">${Math.max(0,Math.ceil(dl/7))}</div><div class="l">weeks left</div></div>`+
     `<div class="wp"><div class="n">${computeHours()}</div><div class="l">hours logged</div></div>`+
     `<div class="wp"><div class="n">${recallDue().length}</div><div class="l">recall due</div></div>`;
+  // pacing nudge — chapters/week needed vs. recent rate
+  const pace=pacePlan(),paceEl=document.getElementById('cd-pace');
+  if(paceEl){
+    if(!pace.first){paceEl.className='cd-pace';paceEl.style.display='none';}
+    else if(!pace.remaining){paceEl.className='cd-pace ok show';paceEl.innerHTML='<b>Syllabus cleared</b> — pour the hours into recall &amp; mock papers now.';}
+    else{const behind=pace.rate<pace.needPerWk;
+      paceEl.className='cd-pace show '+(behind?'behind':'ok');
+      paceEl.innerHTML=`<b>${pace.needPerWk}/week</b> to finish the remaining <b>${pace.remaining}</b> chapter${pace.remaining!==1?'s':''} before exams begin · ${pace.days}d out. <span class="cp-rate">Lately you're clearing ≈ ${pace.rate}/week.</span>`;}
+  }
   const liveXP=computeXP();if(liveXP>(S.xpMax||0)){S.xpMax=liveXP;save();}
   const xp=Math.max(liveXP,S.xpMax||0),lv=Math.floor(xp/XP_PER)+1,into=xp%XP_PER;
   document.getElementById('lname').textContent=LEVELS[Math.min(lv-1,LEVELS.length-1)];
@@ -1509,8 +1641,8 @@ function renderProjects(){const el=document.getElementById('proj-list');
       return `<div class="secgroup ${gopen?'open':''}">
         <div class="sechd" onclick="this.parentElement.classList.toggle('open')">
           <span class="caret">▶</span>
-          <span class="stitle">Section ${g.section}</span>
-          <span class="sw ${wclass(g.weight)}">${g.weight}</span>
+          <span class="stitle">Section ${esc(g.section)}</span>
+          <span class="sw ${wclass(g.weight)}">${esc(g.weight)}</span>
           <span class="sprog">${gdone}/${gtot}</span></div>
         <div class="stages">${g.items.map(({s,idx})=>{const due=s.done&&s.recall&&s.recall.due<=ty;
           return `<div class="stage ${s.done?'done':''}" role="button" tabindex="0" aria-pressed="${s.done}" onclick="toggleStage('${p.id}',${idx})">
@@ -1524,7 +1656,7 @@ function renderProjects(){const el=document.getElementById('proj-list');
         ${p.deadline?`<span class="deadline" style="color:${dl<0?'var(--faint)':p.color}">${dl<0?'past target':(dl===0?'due today':dl+' d')} · first pass ${pretty(p.deadline)}</span>`:''}
         <div class="ring" style="--p:${pct};--rc:${p.color}"><span>${pct}%</span></div></div>
       ${p.desc?`<div class="pdesc">${esc(p.desc)}</div>`:''}
-      <div class="wbar">${order.map(g=>{const gd=g.items.filter(x=>x.s.done).length/g.items.length;const w=weightMid(g.weight);return `<i style="width:${(w/totW*100).toFixed(2)}%;background:${gd>=1?p.color:gd>0?p.color+'88':p.color+'22'}" title="Section ${g.section} · ${g.weight} · ${Math.round(gd*100)}%"></i>`;}).join('')}</div>
+      <div class="wbar">${order.map(g=>{const gd=g.items.filter(x=>x.s.done).length/g.items.length;const w=weightMid(g.weight);return `<i style="width:${(w/totW*100).toFixed(2)}%;background:${gd>=1?p.color:gd>0?p.color+'88':p.color+'22'}" title="Section ${esc(g.section)} · ${esc(g.weight)} · ${Math.round(gd*100)}%"></i>`;}).join('')}</div>
       <div class="wbartx">${wready}% weighted readiness · darker = cleared. Highest-weight sections sit at the left.</div>
       ${recallLine}
       ${secHTML}
@@ -1876,23 +2008,41 @@ function renderRecap(){const r=weeklyRecap(),el=document.getElementById('weekly-
     ${(S.habits&&S.habits.length)?`<div class="rline" style="margin-top:3px;color:var(--green-d)">＋ ${r.life} personal goal${r.life!==1?'s':''} logged this week ${emojis}</div>`:''}`;}
 
 /* ===== focus timer ===== */
-let focusTotal=1500,focusLeft=1500,focusRun=false,focusInt=null,focusBlockId=null,focusLabel='';
-function toggleFocusPanel(){const ac=audio();if(ac&&ac.state==='suspended')ac.resume();document.getElementById('focus-panel').classList.toggle('on');}
+let focusTotal=1500,focusLeft=1500,focusRun=false,focusInt=null,focusBlockId=null,focusLabel='',focusEndAt=0;
+function toggleFocusPanel(){const ac=audio();if(ac&&ac.state==='suspended')ac.resume();document.getElementById('focus-panel').classList.toggle('on');updFocusToday();}
+function focusTodayMin(){const ty=todayY();return (S.focusLog||[]).filter(f=>f.date===ty).reduce((a,f)=>a+(f.min||0),0);}
+function updFocusToday(){const el=document.getElementById('focus-today');if(!el)return;const m=focusTodayMin();
+  if(m){el.innerHTML='<span><b>'+m+'</b> min focused today</span>';el.style.display='block';}else{el.innerHTML='';el.style.display='none';}}
 function setFocusPreset(min,btn){if(focusRun)return;document.querySelectorAll('#focus-presets button').forEach(b=>b.classList.toggle('on',b===btn));focusTotal=min*60;focusLeft=min*60;focusBlockId=null;focusLabel='';document.getElementById('focus-lab').textContent='Ready · '+min+' min';drawFocus();}
 function fmtClock(s){const m=Math.floor(s/60),ss=s%60;return m+':'+String(ss).padStart(2,'0');}
 function drawFocus(){const tEl=document.getElementById('focus-time');if(!tEl)return;tEl.textContent=fmtClock(focusLeft);
   const arc=document.getElementById('focus-arc');if(arc){const C=465,frac=focusTotal?focusLeft/focusTotal:0;arc.style.strokeDashoffset=C*(1-frac);}}
 function focusStartPause(){const ac=audio();if(ac&&ac.state==='suspended')ac.resume();
-  if(focusRun){clearInterval(focusInt);focusRun=false;document.getElementById('focus-go').textContent='Resume';document.getElementById('focus-fab').classList.remove('run');return;}
+  if(focusRun){ // pause — capture exact remaining from the clock
+    clearInterval(focusInt);focusRun=false;
+    focusLeft=Math.max(0,Math.round((focusEndAt-Date.now())/1000));
+    document.getElementById('focus-go').textContent='Resume';document.getElementById('focus-fab').classList.remove('run');
+    drawFocus();return;}
   if(focusLeft<=0){focusLeft=focusTotal;}
-  focusRun=true;document.getElementById('focus-go').textContent='Pause';document.getElementById('focus-fab').classList.add('run');
-  focusInt=setInterval(()=>{focusLeft--;if(focusLeft<=0){focusLeft=0;drawFocus();focusComplete();return;}drawFocus();if(focusLeft>0&&focusLeft%300===0)playChime('tick');},1000);}
-function focusReset(){clearInterval(focusInt);focusRun=false;focusLeft=focusTotal;document.getElementById('focus-go').textContent='Start';document.getElementById('focus-fab').classList.remove('run');document.getElementById('focus-lab').textContent='Ready · '+Math.round(focusTotal/60)+' min';drawFocus();}
-function focusComplete(){clearInterval(focusInt);focusRun=false;document.getElementById('focus-go').textContent='Start';document.getElementById('focus-fab').classList.remove('run');
+  focusRun=true;focusEndAt=Date.now()+focusLeft*1000;
+  document.getElementById('focus-go').textContent='Pause';document.getElementById('focus-fab').classList.add('run');
+  focusTick(); // draw immediately, then poll
+  focusInt=setInterval(focusTick,500);}
+// Wall-clock tick: time is derived from focusEndAt, so backgrounding/throttling can't lose seconds.
+function focusTick(){if(!focusRun)return;
+  const prev=focusLeft;
+  focusLeft=Math.max(0,Math.round((focusEndAt-Date.now())/1000));
+  drawFocus();
+  if(focusLeft>0&&Math.floor(prev/300)>Math.floor(focusLeft/300))playChime('tick'); // 5-min chime
+  if(focusLeft<=0)focusComplete();}
+// Re-sync the display when the tab/app regains focus (catches time elapsed while hidden, completes if due).
+function focusResync(){if(focusRun)focusTick();}
+function focusReset(){clearInterval(focusInt);focusRun=false;focusEndAt=0;focusLeft=focusTotal;document.getElementById('focus-go').textContent='Start';document.getElementById('focus-fab').classList.remove('run');document.getElementById('focus-lab').textContent='Ready · '+Math.round(focusTotal/60)+' min';drawFocus();}
+function focusComplete(){clearInterval(focusInt);focusRun=false;focusEndAt=0;document.getElementById('focus-go').textContent='Start';document.getElementById('focus-fab').classList.remove('run');
   const mins=Math.round(focusTotal/60);(S.focusLog=S.focusLog||[]).push({date:todayY(),min:mins,label:focusLabel||'Focus',blockId:focusBlockId});
   if(focusBlockId){const b=(S.blocks[todayY()]||[]).find(x=>x.id===focusBlockId);if(b&&!b.done)b.done=true;}
   save();bigConfetti();playChime('finish');toast(''+mins+' min focused — logged it.');
-  document.getElementById('focus-lab').textContent='Done! '+mins+' min logged ';focusLeft=focusTotal;drawFocus();
+  document.getElementById('focus-lab').textContent='Done! '+mins+' min logged ';focusLeft=focusTotal;drawFocus();updFocusToday();
   refreshAll();afterRender();}
 function startFocusFromBlock(id){const b=(S.blocks[ttDate]||[]).find(x=>x.id===id)||(S.blocks[todayY()]||[]).find(x=>x.id===id);if(!b){toast('Open today to focus this block.');return;}
   const mins=Math.max(1,Math.round(toMin(b.end)-toMin(b.start)));focusTotal=mins*60;focusLeft=mins*60;focusBlockId=b.id;focusLabel=b.label;
@@ -2089,10 +2239,27 @@ function migrate(){let dirty=false;
   if(dirty)save();}
 
 /* ===== init ===== */
-buildNav();load();seed();migrate();applyTheme();renderToday();drawFocus();updSoundBtn();scheduleReminder();
+buildNav();load();seed();migrate();applyTheme();renderToday();drawFocus();updSoundBtn();updFocusToday();scheduleReminder();
 if(syncOn())cloudPull();
-window.addEventListener('focus',()=>{if(syncOn())cloudPull();});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&syncOn())cloudPull();});
+window.addEventListener('focus',()=>{focusResync();if(syncOn())cloudPull();});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){focusResync();if(syncOn())cloudPull();}});
+
+/* ===== keyboard shortcuts ===== */
+document.addEventListener('keydown',e=>{
+  if(e.defaultPrevented)return;
+  // Esc closes any open modal (sprint, reward wheel, edit dialogs)
+  if(e.key==='Escape'&&MB.classList.contains('on')){closeModal();return;}
+  if(!sprint)return; // remaining shortcuts are sprint-only
+  const tag=(e.target&&e.target.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='textarea'||tag==='select')return;
+  if(!sprint.revealed){
+    if(e.key===' '||e.key==='Enter'){e.preventDefault();sprintReveal();}
+    else if(e.key.toLowerCase()==='s'){e.preventDefault();sprintSkip();}
+  }else{
+    const g={'1':'forgot','2':'hard','3':'good','4':'easy'}[e.key];
+    if(g){e.preventDefault();sprintGrade(g);}
+  }
+});
 </script>
 </body>
 </html>
