@@ -575,11 +575,17 @@ input[type=date].field,input[type=time].field{color-scheme:light}
 .pick{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px}
 .pick button{border:1px solid var(--line);background:#fff;padding:7px 12px;border-radius:9px;font-size:12.5px;color:var(--soft);font-weight:600}
 .pick button.on{border-color:var(--purple);color:var(--purple-d);background:var(--purple-bg)}
-.exedit{display:flex;flex-direction:column;gap:8px;margin-top:4px}
-.exrow{display:flex;align-items:center;gap:10px}
-.exrow .exlbl{flex:0 0 128px;font-size:12.5px;color:var(--soft)}
-.exrow .exlbl b{color:var(--ink);font-weight:700}.exrow .exlbl em{font-style:normal;color:var(--faint);font-size:11px}
-.exrow .field{flex:1}
+.exedit{display:flex;flex-direction:column;gap:9px;margin-top:5px}
+.exrow{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line2);border-radius:11px;padding:9px 10px;background:var(--card2)}
+.exrow .exr1{display:flex;gap:8px;align-items:center}
+.exrow .exr1 .exname{flex:1;min-width:0}
+.exrow .exr2{display:flex;gap:8px}
+.exrow .exr2 .exshort{flex:0 0 92px}
+.exrow .exr2 .exdate{flex:1;min-width:0}
+.exrow .exdel{flex:none;width:30px;height:30px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--faint);font-size:18px;line-height:1;display:grid;place-items:center}
+.exrow .exdel:hover{color:var(--pink-d);border-color:var(--pink)}
+.exaddrow{margin-top:10px}
+.exempty{font-size:12.5px;color:var(--soft);padding:6px 2px}
 
 #cf{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
 .cfp{position:absolute;width:8px;height:12px;border-radius:2px;will-change:transform}
@@ -654,6 +660,30 @@ input[type=date].field,input[type=time].field{color-scheme:light}
   .cell .evdots{display:flex}      /* …show compact dots; tap a day for the full list */
   .cell .more{display:none}
   .syncbtns .btn{flex:1}
+  /* —— Today: calmer, denser dashboard on phones —— */
+  .head{margin-bottom:12px}
+  .head .title h2{font-size:23px}
+  .head .title .sub{font-size:12.5px}
+  .hero{gap:11px;margin-bottom:12px}
+  .cd{padding:15px 16px}
+  .cd .big{font-size:40px}
+  .garden{padding:13px 15px 11px}
+  .garden .scene{min-height:118px}
+  .garden .gname{font-size:17px}
+  .garden .ghint{margin-top:4px}
+  .strip{gap:10px;margin-bottom:12px}
+  .stats{gap:9px;margin-bottom:12px}
+  .stat{padding:12px 13px}
+  .stat .n{font-size:22px}
+  .card{padding:15px 16px}
+  .card+.card{margin-top:11px}
+  .ch{margin-bottom:11px}
+  .ch h3{font-size:16.5px}
+  .recap{padding:15px 16px}
+  .recap h3{font-size:17px}
+  .sprint-cta{padding:12px 14px;margin-bottom:11px}
+  .sprint-cta .sc-t{font-size:15px}
+  .banner{padding:11px 13px;margin-bottom:12px}
 }
 
 @media print{
@@ -723,7 +753,13 @@ input[type=date].field,input[type=time].field{color-scheme:light}
 .nextmove .nm-t{font-family:'Fraunces',serif;font-size:17px;color:var(--ink);margin-top:1px;line-height:1.22}
 .nextmove .nm-t b{font-weight:600}
 .nextmove .btn{flex:none}
-@media(max-width:560px){.nextmove{flex-wrap:wrap}.nextmove .btn{margin-left:56px}}
+@media(max-width:560px){
+  .nextmove{flex-wrap:wrap;gap:10px;padding:11px 13px;border-radius:13px;margin-bottom:12px}
+  .nextmove .nm-ic{width:34px;height:34px;border-radius:10px;font-size:17px}
+  .nextmove .nm-k{font-size:9px;letter-spacing:.12em}
+  .nextmove .nm-t{font-size:13.5px;line-height:1.25}
+  .nextmove .btn{margin-left:44px;padding:6px 13px;font-size:12.5px}
+}
 
 /* ===== recall cleared state ===== */
 .rcl-clear{display:flex;align-items:center;gap:14px;padding:14px 4px}
@@ -1202,7 +1238,7 @@ function lockNow(){
 /* ===== state ===== */
 const KEY='ca_study_daybook_v2';
 const OLDKEY='ca_study_daybook_cute_v1';
-let S={exam:'2026-11-02',examSchedule:null,tasks:[],blocks:{},projects:[],meetings:[],recallLog:[],xpMax:0,sound:true,focusLog:[],petName:null,theme:'oxford',colorMapV:0};
+let S={exam:'2026-11-02',examSchedule:null,examTitle:null,tasks:[],blocks:{},projects:[],meetings:[],recallLog:[],xpMax:0,sound:true,focusLog:[],petName:null,theme:'oxford',colorMapV:0};
 let ttDate=todayY(),calM=new Date().getMonth(),calY=new Date().getFullYear(),calSel=null,blockType='concept',projColor='#b27361',eventKind='event';
 const RECALL_INTERVALS=[1,3,7,16,35,75];
 
@@ -1363,6 +1399,7 @@ const EXAM_SCHEDULE=[
   {n:6,group:'II',pid:null, short:'IBS',  name:'Integrated Business Solutions (Elective)',             date:'2026-11-13'},
 ];
 function examList(){return (S.examSchedule&&S.examSchedule.length)?S.examSchedule:EXAM_SCHEDULE;}
+function examTitle(){return S.examTitle||'CA Final · November 2026';}
 // next paper on/after today; falls back to the last paper once exams are over
 function nextExam(){const t=todayY(),list=examList();return list.find(p=>p.date>=t)||list[list.length-1];}
 
@@ -2130,12 +2167,40 @@ document.addEventListener('keydown',function(e){
     if(el&&el.getAttribute&&el.getAttribute('role')==='button'&&el.tagName!=='BUTTON'){e.preventDefault();el.click();}}
 });
 
-function editExam(){const list=examList();
-  MD.innerHTML=`<h3>Exam schedule</h3><label>CA Final · November 2026 — adjust any date if ICAI revises it</label>
-  <div class="exedit">${list.map((p,i)=>`<div class="exrow"><span class="exlbl"><b>P${p.n}</b> ${esc(p.short)} <em>· Grp ${p.group}</em></span><input class="field" type="date" id="ex-${i}" value="${p.date}"></div>`).join('')}</div>
-  <div class="actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveExam()">Save</button></div>`;showModal();}
-function saveExam(){const list=examList().map((p,i)=>Object.assign({},p,{date:document.getElementById('ex-'+i).value||p.date}));
-  list.sort((a,b)=>a.date<b.date?-1:1);S.examSchedule=list;S.exam=list[0].date;save();closeModal();renderToday();toast('Exam schedule updated.');}
+let examDraft=null;
+function editExam(){
+  examDraft=examList().map(p=>Object.assign({},p));   // editable working copy (preserves pid/group)
+  MD.innerHTML=`<h3>Exam schedule</h3>
+  <label>Exam title</label>
+  <input class="field" id="ex-title" value="${esc(examTitle())}" placeholder="e.g. CA Final · Nov 2026 · NRB Assistant · MOFA 2026">
+  <label style="margin-top:14px">Papers — edit name, code &amp; date. They reorder by date automatically.</label>
+  <div class="exedit" id="ex-list"></div>
+  <button class="btn sm exaddrow" onclick="examAddRow()">+ Add paper</button>
+  <div class="actions"><button class="btn" onclick="closeModal()">Cancel</button><button class="btn primary" onclick="saveExam()">Save</button></div>`;
+  renderExamRows();showModal();
+}
+function renderExamRows(){const el=document.getElementById('ex-list');if(!el)return;
+  el.innerHTML=examDraft.length?examDraft.map((p,i)=>`
+    <div class="exrow">
+      <div class="exr1"><input class="field exname" id="exn-${i}" value="${esc(p.name||'')}" placeholder="Paper name"><button class="exdel" title="Remove paper" onclick="examDelRow(${i})">×</button></div>
+      <div class="exr2"><input class="field exshort" id="exs-${i}" value="${esc(p.short||'')}" placeholder="Code"><input class="field exdate" id="exd-${i}" type="date" value="${p.date||''}"></div>
+    </div>`).join(''):'<div class="exempty">No papers yet — tap “+ Add paper”.</div>';}
+function readExamRows(){examDraft.forEach((p,i)=>{
+  const n=document.getElementById('exn-'+i),s=document.getElementById('exs-'+i),d=document.getElementById('exd-'+i);
+  if(n)p.name=n.value.trim();if(s)p.short=s.value.trim();if(d)p.date=d.value;});}
+function examAddRow(){readExamRows();examDraft.push({n:examDraft.length+1,group:'',pid:null,short:'',name:'',date:todayY()});
+  renderExamRows();const f=document.getElementById('exn-'+(examDraft.length-1));if(f)f.focus();}
+function examDelRow(i){readExamRows();examDraft.splice(i,1);renderExamRows();}
+function saveExam(){readExamRows();
+  let list=examDraft.filter(p=>(p.name||p.short)&&p.date);   // keep rows that have a label + a date
+  list.forEach(p=>{if(!p.short&&p.name)p.short=p.name.split(/\s+/).filter(Boolean).map(w=>w[0]).join('').slice(0,4).toUpperCase();
+                   if(!p.name&&p.short)p.name=p.short;});
+  if(!list.length){alert('Add at least one paper with a date.');return;}
+  list.sort((a,b)=>a.date<b.date?-1:(a.date>b.date?1:0));
+  list.forEach((p,i)=>p.n=i+1);                              // renumber Paper 1..N by date
+  S.examSchedule=list;S.exam=list[0].date;
+  S.examTitle=(document.getElementById('ex-title').value.trim())||null;
+  save();closeModal();renderToday();renderExam();toast('Exam schedule updated.');}
 
 const TYPES=['concept','problems','recall','revision','paper','break'];
 const TYPEDEF={concept:{l:'New concept',s:'04:30',e:'06:00'},problems:{l:'Problem practice',s:'06:00',e:'07:30'},recall:{l:'Active recall',s:'04:00',e:'04:30'},revision:{l:'Revision',s:'20:30',e:'21:30'},paper:{l:'Timed paper',s:'10:00',e:'13:00'},break:{l:'Break',s:'16:00',e:'16:15'}};
@@ -2256,12 +2321,14 @@ function paperReadiness(p){if(!p.pid)return null;const pr=S.projects.find(x=>x.i
 const EXAM_COLORS=['#3f5d7a','#b27361','#5c8b73','#8f574a','#2c4660','#436b57'];
 function renderExam(){const ty=todayY(),nx=nextExam(),list=examList();
   const total=Math.max(0,daysBetween(ty,nx.date));
-  document.getElementById('exam-hint').innerHTML=`<b>${total}</b> day${total!==1?'s':''} to your first paper — ${esc(nx.name)}. Group I runs Nov 2–6, Group II Nov 9–13.`;
+  const subEl=document.getElementById('exam-sub');
+  if(subEl)subEl.textContent=examTitle()+' — '+list.length+' paper'+(list.length!==1?'s':'')+', one summit';
+  document.getElementById('exam-hint').innerHTML=`<b>${total}</b> day${total!==1?'s':''} to your first paper — ${esc(nx.name)} on ${prettyY(nx.date)}.`;
   document.getElementById('exam-grid').innerHTML=list.map((p,idx)=>{
     const c=EXAM_COLORS[idx%EXAM_COLORS.length],diff=daysBetween(ty,p.date),over=diff<0,dd=Math.max(0,diff);
     const r=paperReadiness(p),now=p.date===nx.date,ringP=r?r.pct:0;
     return `<div class="excard ${now?'next':''}" style="--xc:${c}"><div class="extop"></div>
-      <span class="exgrp">Grp ${p.group}</span>
+      ${p.group?`<span class="exgrp">Grp ${esc(p.group)}</span>`:''}
       <div class="exn">Paper ${p.n}${now?' · next up':''}</div>
       <h3>${esc(p.name)}</h3><div class="exwhen">${prettyY(p.date)}</div>
       <div class="exmid"><div class="bigring" style="--p:${ringP}"><span>${r?ringP+'%':'—'}</span></div>
@@ -2588,7 +2655,7 @@ function seedMeetings(){return[
 function seed(){if(localStorage.getItem(KEY))return;const ty=todayY();
   // try migrating old v1 data
   let old=null;try{const r=localStorage.getItem(OLDKEY);if(r)old=JSON.parse(r);}catch(e){}
-  S.exam='2026-11-02';S.examSchedule=EXAM_SCHEDULE.map(p=>Object.assign({},p));
+  S.exam='2026-11-02';S.examSchedule=EXAM_SCHEDULE.map(p=>Object.assign({},p));S.examTitle='CA Final · November 2026';
   S.projects=seedProjects(ty);
   S.meetings=(old&&Array.isArray(old.meetings)&&old.meetings.length)?old.meetings:seedMeetings();
   S.tasks=(old&&Array.isArray(old.tasks)&&old.tasks.length)?old.tasks:[
@@ -2614,6 +2681,7 @@ function migrate(){let dirty=false;
   if(S.remindOn===undefined){S.remindOn=false;dirty=true;}
   if(!S.remindTime){S.remindTime='19:00';dirty=true;}
   if(!S.examSchedule||!S.examSchedule.length){S.examSchedule=EXAM_SCHEDULE.map(p=>Object.assign({},p));S.exam='2026-11-02';dirty=true;}
+  if(S.examTitle===undefined){S.examTitle='CA Final · November 2026';dirty=true;}
   if(S.achSeen===undefined){S.achSeen=achState().filter(a=>a.done).map(a=>a.id);dirty=true;}
   if(!Array.isArray(S.habits)){S.habits=defaultHabits();dirty=true;}
   else S.habits.forEach(h=>{if(!Array.isArray(h.log)){h.log=[];dirty=true;}if(!h.target){h.target=3;dirty=true;}});
