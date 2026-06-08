@@ -882,6 +882,7 @@ input[type=date].field,input[type=time].field{color-scheme:light}
           <button class="btn sm" onclick="exportJSON()">Backup</button>
           <button class="btn sm" onclick="document.getElementById('imp').click()">Restore</button>
           <input type="file" id="imp" accept="application/json" style="display:none" onchange="importJSON(event)">
+          <button class="btn sm" onclick="openSync()">Sync…</button>
         </div>
         <div class="print-only" id="print-head"></div>
         <div id="hist-summary" style="margin-bottom:14px"></div>
@@ -952,22 +953,27 @@ function load(){try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSO
 function save(){S.updatedAt=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){alert('Could not save — storage may be full or blocked.');}cloudPush();}
 
 /* ===== cloud sync across devices (GitHub Gist) =====
-   ┌──────────────────────────────────────────────────────────────┐
-   │  Leave both blank and the app just works locally (no sync).    │
-   │  To sync across phone/laptop/etc, fill both in (setup steps    │
-   │  are in the chat). Edit them on github.com and commit anytime. │
-   └──────────────────────────────────────────────────────────────┘ */
-const SYNC_GIST_ID = 'fb0437406507236649a1657bff72fd36';   // ← paste your secret Gist ID here
-const SYNC_TOKEN   = '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';   // ← paste your GitHub token here (Gist access only)
-
+   ┌──────────────────────────────────────────────────────────────────┐
+   │  SECURITY — do NOT put your token in this file.                    │
+   │  This page is public on GitHub: anything committed here is         │
+   │  world-readable, and GitHub auto-revokes any token it spots.       │
+   │                                                                    │
+   │  Instead, open Sync settings inside the app (History tab → Sync…)  │
+   │  and paste your Gist ID + token there, once per device. They are   │
+   │  saved only in THIS browser's storage — never in the repo. The     │
+   │  panel has the full one-time setup steps.                          │
+   └──────────────────────────────────────────────────────────────────┘ */
 const SYNC_FILE='almanac-data.json';
-const syncOn=()=>!!(SYNC_GIST_ID&&SYNC_TOKEN);
+const SYNC_ID_KEY='almanac_sync_gist', SYNC_TOKEN_KEY='almanac_sync_token';
+function syncGistId(){try{return localStorage.getItem(SYNC_ID_KEY)||'';}catch(e){return '';}}
+function syncToken(){try{return localStorage.getItem(SYNC_TOKEN_KEY)||'';}catch(e){return '';}}
+const syncOn=()=>!!(syncGistId()&&syncToken());
 let pushTimer=null,suppressPush=false,warnedAuth=false;
-function ghHeaders(){return {'Authorization':'Bearer '+SYNC_TOKEN,'Accept':'application/vnd.github+json'};}
+function ghHeaders(){return {'Authorization':'Bearer '+syncToken(),'Accept':'application/vnd.github+json'};}
 async function cloudPull(){
   if(!syncOn())return;
   try{
-    const r=await fetch('https://api.github.com/gists/'+SYNC_GIST_ID,{headers:ghHeaders()});
+    const r=await fetch('https://api.github.com/gists/'+syncGistId(),{headers:ghHeaders()});
     if(r.status===401||r.status===404){if(!warnedAuth){warnedAuth=true;toast('Sync: check your Gist ID / token.');}return;}
     if(!r.ok)return;
     const g=await r.json(),f=g.files&&g.files[SYNC_FILE];
@@ -986,7 +992,7 @@ function cloudPush(immediate){
   if(!syncOn()||suppressPush)return;
   clearTimeout(pushTimer);
   const doIt=()=>{
-    fetch('https://api.github.com/gists/'+SYNC_GIST_ID,{
+    fetch('https://api.github.com/gists/'+syncGistId(),{
       method:'PATCH',
       headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),
       body:JSON.stringify({files:{[SYNC_FILE]:{content:JSON.stringify(S)}}})
@@ -994,6 +1000,62 @@ function cloudPush(immediate){
   };
   if(immediate)doIt();else pushTimer=setTimeout(doIt,1500);
 }
+
+/* ----- sync settings (credentials live in localStorage only, never in the repo) ----- */
+function openSync(){
+  const id=syncGistId(), tok=syncToken(), on=syncOn();
+  MD.innerHTML=`<h3>Sync across devices</h3>
+    <div class="pass-sub">Optional. Keeps this almanac in step on your phone, laptop, etc. via a private GitHub Gist. Your ID &amp; token are saved only in this browser — never in the public page.</div>
+    <label>Gist ID</label>
+    <input class="field" id="sy-id" value="${esc(id)}" placeholder="e.g. 4f3a9c8b2e1d…" autocomplete="off" spellcheck="false">
+    <label>GitHub token <span style="font-weight:400;color:var(--faint)">— gist access only</span></label>
+    <input class="field" id="sy-tok" type="password" value="${esc(tok)}" placeholder="github_pat_… or ghp_…" autocomplete="off" spellcheck="false">
+    <div class="passhint">
+      <b>One-time setup</b><br>
+      1. At gist.github.com, create a <b>secret</b> gist with a file named <code>${SYNC_FILE}</code> (any contents). Copy the long ID from its URL.<br>
+      2. At github.com → Settings → Developer settings → Personal access tokens → <b>Tokens (classic)</b>, generate a token whose <b>only</b> ticked scope is <code>gist</code>. (Gists aren't available to fine-grained tokens.)<br>
+      3. Paste both here on every device you use — and never commit them to the repo.
+    </div>
+    <div id="sy-status" class="passempty"></div>
+    <div class="actions">
+      ${on?`<button class="btn ghost" style="margin-right:auto" onclick="syncDisconnect()">Disconnect</button>`:''}
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="syncTest()">Test</button>
+      <button class="btn primary" onclick="syncSave()">Save</button>
+    </div>`;
+  showModal();
+}
+function syncSave(){
+  const id=(document.getElementById('sy-id').value||'').trim();
+  const tok=(document.getElementById('sy-tok').value||'').trim();
+  try{
+    if(id)localStorage.setItem(SYNC_ID_KEY,id);else localStorage.removeItem(SYNC_ID_KEY);
+    if(tok)localStorage.setItem(SYNC_TOKEN_KEY,tok);else localStorage.removeItem(SYNC_TOKEN_KEY);
+  }catch(e){alert('Could not save — this browser is blocking storage.');return;}
+  warnedAuth=false;closeModal();
+  if(syncOn()){toast('Sync on for this device.');cloudPull();}
+  else toast('Sync is off.');
+}
+function syncDisconnect(){
+  try{localStorage.removeItem(SYNC_ID_KEY);localStorage.removeItem(SYNC_TOKEN_KEY);}catch(e){}
+  warnedAuth=false;closeModal();toast('Sync disconnected on this device.');
+}
+async function syncTest(){
+  const id=(document.getElementById('sy-id').value||'').trim();
+  const tok=(document.getElementById('sy-tok').value||'').trim();
+  const st=document.getElementById('sy-status');if(!st)return;
+  if(!id||!tok){st.textContent='Enter both a Gist ID and a token first.';return;}
+  st.textContent='Checking…';
+  try{
+    const r=await fetch('https://api.github.com/gists/'+id,{headers:{'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'}});
+    if(r.status===401){st.textContent='Token rejected (401) — check the token and that it has Gist access.';return;}
+    if(r.status===404){st.textContent='Gist not found (404) — check the ID and that this token can see it.';return;}
+    if(!r.ok){st.textContent='GitHub returned error '+r.status+'. Try again in a moment.';return;}
+    const g=await r.json(),has=g.files&&g.files[SYNC_FILE];
+    st.innerHTML=has?'\u2713 Connected — found <code>'+SYNC_FILE+'</code>.':'\u2713 Connected, but no <code>'+SYNC_FILE+'</code> file yet — it will be created on first save.';
+  }catch(e){st.textContent='Network error — could not reach GitHub.';}
+}
+
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 
 /* ===== dates ===== */
