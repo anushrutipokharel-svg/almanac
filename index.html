@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Almanac · Anushruti</title>
+<!-- Home-screen app behaviour: opens full-screen, named "Almanac", themed. -->
+<meta name="theme-color" content="#3f5d7a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Almanac">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1053,33 +1059,32 @@ const RECALL_INTERVALS=[1,3,7,16,35,75];
 function load(){try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r));}catch(e){console.warn(e);}}
 function save(){S.updatedAt=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){alert('Could not save — storage may be full or blocked.');}cloudPush();}
 
-/* ===== cloud sync across devices (GitHub Gist) =====
+/* ===== cloud sync across devices (Google Apps Script) =====
    ┌──────────────────────────────────────────────────────────────────┐
-   │  SECURITY — do NOT put your token in this file.                    │
-   │  This page is public on GitHub: anything committed here is         │
-   │  world-readable, and GitHub auto-revokes any token it spots.       │
+   │  Single user, all your devices, tied to your own Google account.   │
    │                                                                    │
-   │  Instead, open Sync settings inside the app (History tab → Sync…)  │
-   │  and paste your Gist ID + token there, once per device. They are   │
-   │  saved only in THIS browser's storage — never in the repo. The     │
-   │  panel has the full one-time setup steps.                          │
+   │  This page is PUBLIC on GitHub, so nothing secret is stored here.  │
+   │  Open Sync settings inside the app (History tab → Sync…) and paste │
+   │  your Web App URL there, once per device. It is saved only in THIS │
+   │  browser's storage — never in the repo. The panel has the full     │
+   │  one-time setup steps (deploy the Apps Script, copy its /exec URL). │
    └──────────────────────────────────────────────────────────────────┘ */
-const SYNC_FILE='almanac-data.json';
-const SYNC_ID_KEY='almanac_sync_gist', SYNC_TOKEN_KEY='almanac_sync_token';
-function syncGistId(){try{return localStorage.getItem(SYNC_ID_KEY)||'';}catch(e){return '';}}
-function syncToken(){try{return localStorage.getItem(SYNC_TOKEN_KEY)||'';}catch(e){return '';}}
-const syncOn=()=>!!(syncGistId()&&syncToken());
+const GAS_URL_KEY='almanac_gas_url', GAS_SECRET_KEY='almanac_gas_secret';
+function gasUrl(){try{return localStorage.getItem(GAS_URL_KEY)||'';}catch(e){return '';}}
+function gasSecret(){try{return localStorage.getItem(GAS_SECRET_KEY)||'';}catch(e){return '';}}
+const syncOn=()=>!!gasUrl();
 let pushTimer=null,suppressPush=false,warnedAuth=false;
-function ghHeaders(){return {'Authorization':'Bearer '+syncToken(),'Accept':'application/vnd.github+json'};}
 async function cloudPull(){
   if(!syncOn())return;
   try{
-    const r=await fetch('https://api.github.com/gists/'+syncGistId(),{headers:ghHeaders()});
-    if(r.status===401||r.status===404){if(!warnedAuth){warnedAuth=true;toast('Sync: check your Gist ID / token.');}return;}
+    // cache-bust so the browser never serves a stale copy of your data
+    const u=gasUrl()+(gasUrl().indexOf('?')<0?'?':'&')+'t='+Date.now()+(gasSecret()?'&secret='+encodeURIComponent(gasSecret()):'');
+    const r=await fetch(u,{method:'GET'});
+    if(r.status===401||r.status===403){if(!warnedAuth){warnedAuth=true;toast('Sync: check your Web App URL / secret.');}return;}
     if(!r.ok)return;
-    const g=await r.json(),f=g.files&&g.files[SYNC_FILE];
-    if(!f||!f.content)return;
-    const remote=JSON.parse(f.content),rT=remote.updatedAt||0,lT=S.updatedAt||0;
+    const remote=await r.json();
+    if(!remote||typeof remote!=='object')return;
+    const rT=remote.updatedAt||0,lT=S.updatedAt||0;
     if(rT>lT){
       suppressPush=true;
       S=Object.assign({},S,remote);
@@ -1093,10 +1098,12 @@ function cloudPush(immediate){
   if(!syncOn()||suppressPush)return;
   clearTimeout(pushTimer);
   const doIt=()=>{
-    fetch('https://api.github.com/gists/'+syncGistId(),{
-      method:'PATCH',
-      headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),
-      body:JSON.stringify({files:{[SYNC_FILE]:{content:JSON.stringify(S)}}})
+    // text/plain keeps this a "simple" request, so the browser skips the CORS
+    // preflight that Apps Script web apps cannot answer. Server JSON.parses it.
+    fetch(gasUrl(),{
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify({secret:gasSecret(),data:S})
     }).catch(e=>console.warn('sync push failed',e));
   };
   if(immediate)doIt();else pushTimer=setTimeout(doIt,1500);
@@ -1104,18 +1111,19 @@ function cloudPush(immediate){
 
 /* ----- sync settings (credentials live in localStorage only, never in the repo) ----- */
 function openSync(){
-  const id=syncGistId(), tok=syncToken(), on=syncOn();
+  const url=gasUrl(), sec=gasSecret(), on=syncOn();
   MD.innerHTML=`<h3>Sync across devices</h3>
-    <div class="pass-sub">Optional. Keeps this almanac in step on your phone, laptop, etc. via a private GitHub Gist. Your ID &amp; token are saved only in this browser — never in the public page.</div>
-    <label>Gist ID</label>
-    <input class="field" id="sy-id" value="${esc(id)}" placeholder="e.g. 4f3a9c8b2e1d…" autocomplete="off" spellcheck="false">
-    <label>GitHub token <span style="font-weight:400;color:var(--faint)">— gist access only</span></label>
-    <input class="field" id="sy-tok" type="password" value="${esc(tok)}" placeholder="github_pat_… or ghp_…" autocomplete="off" spellcheck="false">
+    <div class="pass-sub">Keeps this almanac in step on your phone, laptop, etc. via your own Google account. The Web App URL is saved only in this browser — never in the public page.</div>
+    <label>Web App URL</label>
+    <input class="field" id="sy-url" value="${esc(url)}" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off" spellcheck="false">
+    <label>Shared secret <span style="font-weight:400;color:var(--faint)">— optional</span></label>
+    <input class="field" id="sy-sec" type="password" value="${esc(sec)}" placeholder="leave blank unless you set one in the script" autocomplete="off" spellcheck="false">
     <div class="passhint">
       <b>One-time setup</b><br>
-      1. At gist.github.com, create a <b>secret</b> gist with a file named <code>${SYNC_FILE}</code> (any contents). Copy the long ID from its URL.<br>
-      2. At github.com → Settings → Developer settings → Personal access tokens → <b>Tokens (classic)</b>, generate a token whose <b>only</b> ticked scope is <code>gist</code>. (Gists aren't available to fine-grained tokens.)<br>
-      3. Paste both here on every device you use — and never commit them to the repo.
+      1. Go to <code>script.google.com</code> → <b>New project</b>. Delete the sample code, paste in the <code>Code.gs</code> you were given, and Save.<br>
+      2. Click <b>Deploy → New deployment</b> → select type <b>Web app</b>. Set <b>Execute as: Me</b> and <b>Who has access: Anyone</b>, then Deploy.<br>
+      3. First time only: click <b>Authorize access</b>, pick your Google account, and on the “Google hasn’t verified this app” screen choose <b>Advanced → Go to (your project)</b> → <b>Allow</b>. It’s your own script, so this is safe.<br>
+      4. Copy the <b>Web app URL</b> (it ends in <code>/exec</code>) and paste it above on every device you use.
     </div>
     <div id="sy-status" class="passempty"></div>
     <div class="actions">
@@ -1127,34 +1135,35 @@ function openSync(){
   showModal();
 }
 function syncSave(){
-  const id=(document.getElementById('sy-id').value||'').trim();
-  const tok=(document.getElementById('sy-tok').value||'').trim();
+  const url=(document.getElementById('sy-url').value||'').trim();
+  const sec=(document.getElementById('sy-sec').value||'').trim();
   try{
-    if(id)localStorage.setItem(SYNC_ID_KEY,id);else localStorage.removeItem(SYNC_ID_KEY);
-    if(tok)localStorage.setItem(SYNC_TOKEN_KEY,tok);else localStorage.removeItem(SYNC_TOKEN_KEY);
+    if(url)localStorage.setItem(GAS_URL_KEY,url);else localStorage.removeItem(GAS_URL_KEY);
+    if(sec)localStorage.setItem(GAS_SECRET_KEY,sec);else localStorage.removeItem(GAS_SECRET_KEY);
   }catch(e){alert('Could not save — this browser is blocking storage.');return;}
   warnedAuth=false;closeModal();
   if(syncOn()){toast('Sync on for this device.');cloudPull();}
   else toast('Sync is off.');
 }
 function syncDisconnect(){
-  try{localStorage.removeItem(SYNC_ID_KEY);localStorage.removeItem(SYNC_TOKEN_KEY);}catch(e){}
+  try{localStorage.removeItem(GAS_URL_KEY);localStorage.removeItem(GAS_SECRET_KEY);}catch(e){}
   warnedAuth=false;closeModal();toast('Sync disconnected on this device.');
 }
 async function syncTest(){
-  const id=(document.getElementById('sy-id').value||'').trim();
-  const tok=(document.getElementById('sy-tok').value||'').trim();
+  const url=(document.getElementById('sy-url').value||'').trim();
+  const sec=(document.getElementById('sy-sec').value||'').trim();
   const st=document.getElementById('sy-status');if(!st)return;
-  if(!id||!tok){st.textContent='Enter both a Gist ID and a token first.';return;}
+  if(!url){st.textContent='Paste your Web App URL first.';return;}
+  if(url.indexOf('/exec')<0){st.textContent='That URL should end in /exec — copy the Web app URL from the deployment.';return;}
   st.textContent='Checking…';
   try{
-    const r=await fetch('https://api.github.com/gists/'+id,{headers:{'Authorization':'Bearer '+tok,'Accept':'application/vnd.github+json'}});
-    if(r.status===401){st.textContent='Token rejected (401) — check the token and that it has Gist access.';return;}
-    if(r.status===404){st.textContent='Gist not found (404) — check the ID and that this token can see it.';return;}
-    if(!r.ok){st.textContent='GitHub returned error '+r.status+'. Try again in a moment.';return;}
-    const g=await r.json(),has=g.files&&g.files[SYNC_FILE];
-    st.innerHTML=has?'\u2713 Connected — found <code>'+SYNC_FILE+'</code>.':'\u2713 Connected, but no <code>'+SYNC_FILE+'</code> file yet — it will be created on first save.';
-  }catch(e){st.textContent='Network error — could not reach GitHub.';}
+    const u=url+(url.indexOf('?')<0?'?':'&')+'t='+Date.now()+(sec?'&secret='+encodeURIComponent(sec):'');
+    const r=await fetch(u,{method:'GET'});
+    if(r.status===401||r.status===403){st.textContent='Rejected ('+r.status+') — check the secret, and that access is set to “Anyone”.';return;}
+    if(!r.ok){st.textContent='Script returned error '+r.status+'. Re-check the deployment.';return;}
+    const d=await r.json();
+    st.innerHTML=(d&&d.updatedAt)?'\u2713 Connected — found your saved almanac.':'\u2713 Connected — no data saved yet; it will be created on first save.';
+  }catch(e){st.textContent='Could not reach the script — check the URL and that access is “Anyone”.';}
 }
 
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
@@ -2239,7 +2248,13 @@ function migrate(){let dirty=false;
   if(dirty)save();}
 
 /* ===== init ===== */
-buildNav();load();seed();migrate();applyTheme();renderToday();drawFocus();updSoundBtn();updFocusToday();scheduleReminder();
+// A brand-new device seeds starter data stamped "now", which could otherwise
+// look newer than your real almanac and overwrite it on first sync. Force the
+// fresh seed to timestamp 0 so genuine cloud data always wins when you connect.
+const __freshDevice=!localStorage.getItem(KEY);
+buildNav();load();seed();migrate();
+if(__freshDevice){S.updatedAt=0;try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+applyTheme();renderToday();drawFocus();updSoundBtn();updFocusToday();scheduleReminder();
 if(syncOn())cloudPull();
 window.addEventListener('focus',()=>{focusResync();if(syncOn())cloudPull();});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden){focusResync();if(syncOn())cloudPull();}});
