@@ -882,6 +882,16 @@ button:focus-visible,.btn:focus-visible,a:focus-visible{outline:2px solid color-
 .cd-pace.behind b{color:var(--amber-d)}
 .cd-pace.ok{background:var(--green-bg);border-color:color-mix(in srgb,var(--green) 26%,var(--line))}
 .cd-pace.ok b{color:var(--green-d)}
+/* This Week (13-week plan) card */
+.wkplan{margin-top:14px;padding:15px 17px}
+.wkplan .wkp-top{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;margin-bottom:10px}
+.wkplan .wkp-wk{font-family:'Fraunces',serif;font-weight:600;font-size:17px;color:var(--ink)}
+.wkplan .wkp-ph{font-size:11px;letter-spacing:.4px;text-transform:uppercase;color:var(--soft);background:color-mix(in srgb,var(--card2) 70%,transparent);border:1px solid var(--line);border-radius:99px;padding:3px 9px}
+.wkplan .wkp-dt{font-size:11.5px;color:var(--faint);margin-left:auto}
+.wkplan .wkp-row{display:flex;gap:9px;align-items:baseline;padding:4.5px 0;font-size:12.5px;line-height:1.45}
+.wkplan .wkp-sub{flex:0 0 52px;font-weight:700;font-size:11px;letter-spacing:.3px}
+.wkplan .wkp-cp{margin-top:9px;padding:8px 11px;border-radius:10px;font-size:12px;line-height:1.45;background:var(--amber-bg);border:1px solid color-mix(in srgb,var(--amber) 30%,var(--line));color:var(--soft)}
+.wkplan .wkp-cp b{color:var(--amber-d)}
 
 /* —— premium scrollbar (desktop) —— */
 *{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--ink) 22%,transparent) transparent}
@@ -978,6 +988,7 @@ body::after{content:"";position:fixed;inset:0;z-index:9999;pointer-events:none;o
         </div>
         <div class="garden" id="garden"></div>
       </div>
+      <div class="card wkplan" id="wk-plan" style="display:none"></div>
       <div class="strip">
         <div class="lvlcard">
           <div class="top"><span class="lname" id="lname">Foundation</span><span class="lv" id="lvtag">Level 1</span></div>
@@ -1400,9 +1411,8 @@ function parseY(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d
 const WD=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 const MO=['January','February','March','April','May','June','July','August','September','October','November','December'];
 function studyType(s){const d=parseY(s).getDay();
-  if(d===0)return{rest:true,label:'Sunday',note:'Rest & buffer day'};
-  if(d===6)return{rest:false,label:'Saturday',note:'Study + 3 hr timed paper'};
-  return{rest:false,label:WD[d],note:'Study day · 04:00–07:30 + 20:30–22:00'};}
+  if(d===6)return{rest:false,label:'Saturday',note:'Audit block 9–11 + weekly test 11:15–13:15 · EVENING OFF'};
+  return{rest:false,label:WD[d],note:'Study day · 5:30–7:30 AM + 6:30–9:30 PM'};}
 function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m;}
 function fmtT(min){let h=Math.floor(min/60),m=min%60,ap=h>=12?'PM':'AM',hh=h%12;if(hh===0)hh=12;return hh+(m?':'+String(m).padStart(2,'0'):'')+' '+ap;}
 function pretty(s){const d=parseY(s);return WD[d.getDay()].slice(0,3)+', '+d.getDate()+' '+MO[d.getMonth()].slice(0,3);}
@@ -1410,11 +1420,34 @@ function prettyY(s){return pretty(s)+' '+parseY(s).getFullYear();}
 function addDays(s,n){const d=parseY(s);d.setDate(d.getDate()+n);return ymd(d);}
 function daysBetween(a,b){return Math.round((parseY(b)-parseY(a))/86400000);}
 
+/* ===== the 13-week plan (from the master planner) ===== */
+const PLAN13=[
+  {wk:1, dates:'3–8 Aug',      phase:'P1 · Concept build',        fr:'Framework, Ind AS 1, 2, 8, 10',            afm:'Portfolio mgmt, risk mgmt',         audit:'SA 200–299, audit strategy',              cp:'Routine started. 5 of 6 days attended.', hrs:27},
+  {wk:2, dates:'9–15 Aug',     phase:'P1 · Concept build',        fr:'Ind AS 16, 23, 36',                        afm:'Security valuation',                audit:'SA 300–499, risk assessment',             cp:'Audit past-paper attempt, timed — find your real baseline.', hrs:32.5},
+  {wk:3, dates:'16–22 Aug',    phase:'P1 · Concept build',        fr:'Ind AS 38, 40, 105',                       afm:'Derivatives — futures, options',    audit:'Company audit, CARO',                     cp:'Confirm Dashain holiday dates & book study leave.', hrs:32.5},
+  {wk:4, dates:'23–29 Aug',    phase:'P1 · Concept build',        fr:'Ind AS 20, 21, 41',                        afm:'Forex risk management',             audit:'SA 500–599, evidence',                    cp:'Phase 1 review. Rework the plan if the Audit baseline was below 30.', hrs:32.5},
+  {wk:5, dates:'30 Aug–5 Sep', phase:'P2 · Full coverage',        fr:'Ind AS 115 — revenue',                     afm:'Interest rate risk, bonds',         audit:'SA 600–699, reliance & reporting',        cp:'FR mock — Ind AS 115 focus.', hrs:32.5},
+  {wk:6, dates:'6–12 Sep',     phase:'P2 · Full coverage',        fr:'Ind AS 116 — leases',                      afm:'Business valuation',                audit:'Audit reports, CARO reporting',           cp:'AFM mock — valuation focus.', hrs:32.5},
+  {wk:7, dates:'13–19 Sep',    phase:'P2 · Full coverage',        fr:'Ind AS 109 — financial instruments',       afm:'M&A, corporate restructuring',      audit:'Ethics & professional conduct',           cp:'Audit mock. Ethics is high-yield — do not skip.', hrs:32.5},
+  {wk:8, dates:'20–26 Sep',    phase:'P2 · Full coverage',        fr:'Ind AS 19, 12, 33',                        afm:'Mutual funds, securitisation',      audit:'Bank & NBFC audit',                       cp:'Half-way review. All three papers attempted once.', hrs:32.5},
+  {wk:9, dates:'27 Sep–3 Oct', phase:'P3 · Completion + testing', fr:'Ind AS 103, 110 — consolidation',          afm:'International financial mgmt',      audit:'Specialised audits, quality control',     cp:'AUDIT HOURS RISE — Thursday evening switches to Audit.', hrs:32.5},
+  {wk:10,dates:'4–10 Oct',     phase:'P3 · Completion + testing', fr:'Consolidation — full problems',            afm:'Startup finance, past papers',      audit:'Digital auditing, forensic, due diligence',cp:'Work-engagement peak — protect the mornings above all.', hrs:30},
+  {wk:11,dates:'11–17 Oct',    phase:'P3 · Completion + testing', fr:'Share-based payment, EPS, past papers',    afm:'Full past papers, timed',           audit:'Full past papers, timed',                 cp:'Full mock — all three papers, exam timings.', hrs:30},
+  {wk:12,dates:'18–24 Oct',    phase:'P4 · Dashain sprint',       fr:'Full revision — weak areas only',          afm:'Formula sheet + problem drills',    audit:'SA recall drills, ethics recall',         cp:'LEAVE BLOCK. Target 45+ hrs. Second full mock.', hrs:45},
+  {wk:13,dates:'25–31 Oct',    phase:'P4 · Final revision',       fr:'Revision notes only — no new topics',      afm:'Revision notes only',               audit:'SA list, ethics, reporting formats',      cp:'Third full mock, then taper. Sleep matters more than one more hour.', hrs:45},
+];
+const PLAN_ANCHOR='2026-08-02'; // Sunday before week 1
+function planWeek(s){s=s||todayY();const n=Math.floor(daysBetween(PLAN_ANCHOR,s)/7)+1;
+  if(n<1)return null;
+  if(n>=1&&n<=13)return PLAN13[n-1];
+  if(s<='2026-11-06')return{wk:n,dates:'Exam week',phase:'Exams',fr:'Trust the taper',afm:'Trust the taper',audit:'Trust the taper',cp:'Show up rested. You did the work.',hrs:0};
+  return null;}
+
 /* ===== exam schedule (ICAI CA Final · Nov 2026) ===== */
 const EXAM_SCHEDULE=[
   {n:1,group:'I', pid:'fr', short:'FR',   name:'Financial Reporting',                                  date:'2026-11-02'},
   {n:2,group:'I', pid:'afm',short:'AFM',  name:'Advanced Financial Management',                        date:'2026-11-04'},
-  {n:3,group:'I', pid:null, short:'Audit',name:'Advanced Auditing, Assurance & Professional Ethics',   date:'2026-11-06'},
+  {n:3,group:'I', pid:'audit',short:'Audit',name:'Advanced Auditing, Assurance & Professional Ethics', date:'2026-11-06'},
   {n:4,group:'II',pid:null, short:'DT',   name:'Direct Tax Laws & International Taxation',             date:'2026-11-09'},
   {n:5,group:'II',pid:null, short:'IDT',  name:'Indirect Tax Laws',                                    date:'2026-11-11'},
   {n:6,group:'II',pid:null, short:'IBS',  name:'Integrated Business Solutions (Elective)',             date:'2026-11-13'},
@@ -1447,7 +1480,7 @@ function setBadges(){const due=recallDue().length;
   document.querySelectorAll('[data-badge="recall"]').forEach(b=>{b.style.display=due?'grid':'none';b.textContent=due;});}
 
 /* ===== gamification ===== */
-const LEVELS=['Foundation','Steady Hand','Disciplined','Ind AS Adept','Valuation Specialist','Derivatives Strategist','Consolidation Expert','Forex Tactician','Mock-Test Veteran','Revision Master','Exam-Ready'];
+const LEVELS=['Foundation','Steady Hand','Disciplined','Ind AS Adept','Valuation Specialist','SA Specialist','Derivatives Strategist','Consolidation Expert','Ethics Guardian','Forex Tactician','Mock-Test Veteran','Revision Master','Exam-Ready'];
 const XP_PER=600;
 function computeXP(){let xp=0;
   S.tasks.forEach(t=>{if(t.done)xp+=20;});
@@ -1464,7 +1497,7 @@ function activeDates(){const set=new Set();
   (S.recallLog||[]).forEach(r=>set.add(r.date));
   (S.focusLog||[]).forEach(f=>{if(f.date)set.add(f.date);});
   return set;}
-function isRestDay(s){return parseY(s).getDay()===0;} // Sunday = designated rest/buffer day
+function isRestDay(s){return parseY(s).getDay()===6;} // Saturday = planned off-evening (Nepal week) — bridges the streak, never breaks it
 function computeStreak(){const set=activeDates();let cur=todayY(),n=0;
   // Haven't logged anything yet today? Don't penalise — start the walk from yesterday.
   if(!set.has(cur))cur=addDays(cur,-1);
@@ -1477,6 +1510,24 @@ function computeStreak(){const set=activeDates();let cur=todayY(),n=0;
   return n;}
 function focusLooseMin(){return (S.focusLog||[]).reduce((m,f)=>m+(f.blockId?0:(f.min||0)),0);} // focus not tied to a block
 function computeHours(){let m=0;Object.values(S.blocks).forEach(arr=>arr.forEach(b=>{if(b.done)m+=toMin(b.end)-toMin(b.start);}));m+=focusLooseMin();return Math.round(m/60*10)/10;}
+/* Nepal week (Sun–Sat) hours vs the 32.5h plan / 20h floor */
+function weekBounds(s){const d=parseY(s);const start=addDays(s,-d.getDay());return{start,end:addDays(start,6)};}
+function weekHours(s){const{start,end}=weekBounds(s||todayY());let m=0;
+  Object.entries(S.blocks).forEach(([dt,arr])=>{if(dt>=start&&dt<=end)arr.forEach(b=>{if(b.done)m+=toMin(b.end)-toMin(b.start);});});
+  (S.focusLog||[]).forEach(f=>{if(!f.blockId&&f.date>=start&&f.date<=end)m+=(f.min||0);});
+  return Math.round(m/60*10)/10;}
+/* Rule 5: Audit gets contact EVERY day. A day counts if an audit block was done,
+   an Audit chapter was recalled/graded, or an Audit chapter was cleared that day. */
+function auditContactOn(dt){
+  if((S.blocks[dt]||[]).some(b=>b.done&&/audit/i.test(b.label||'')))return true;
+  if((S.recallLog||[]).some(r=>r.date===dt&&/audit/i.test(r.subject||'')))return true;
+  const ap=(S.projects||[]).find(p=>p.id==='audit');
+  if(ap&&ap.stages.some(s=>s.doneAt===dt||(s.recall&&s.recall.last===dt)))return true;
+  return false;}
+function auditStreak(){let cur=todayY(),n=0;
+  if(!auditContactOn(cur))cur=addDays(cur,-1); // nothing yet today? start from yesterday
+  while(auditContactOn(cur)){n++;cur=addDays(cur,-1);}
+  return n;}
 function chaptersCleared(){return S.projects.reduce((a,p)=>a+p.stages.filter(s=>s.done).length,0);}
 function papersDone(){return S.meetings.filter(m=>m.kind==='paper'&&m.done).length;}
 
@@ -1589,7 +1640,6 @@ const NUDGES=["Recall it before you re-read it — that's where it sticks.","Dis
 function renderToday(){
   const ty=todayY(),st=studyType(ty),h=new Date().getHours();
   document.getElementById('greet').textContent=(h<12?'Good morning':h<17?'Good afternoon':'Good evening')+', Anushruti';
-  document.getElementById('today-sub').innerHTML=prettyY(ty)+' · <b>'+st.note+'</b>';
   document.getElementById('pet-msg').textContent=petState().msg;
   renderNextMove();
   const nx=nextExam(),dl=Math.max(0,daysBetween(ty,nx.date));
@@ -1601,10 +1651,23 @@ function renderToday(){
     return `<span class="expill${now?' now':''}${done?' done':''}" title="Paper ${p.n} · ${esc(p.name)} — ${prettyY(p.date)}">`+
       `<b>${esc(p.short)}</b><i>${parseY(p.date).getDate()} ${MO[parseY(p.date).getMonth()].slice(0,3)}</i></span>`;
   }).join('');
+  const pw=planWeek(ty);
+  document.getElementById('today-sub').innerHTML=prettyY(ty)+' · <b>'+st.note+'</b>'+(pw&&pw.wk<=13?' · Wk '+pw.wk+' — '+esc(pw.phase):'');
+  const wkEl=document.getElementById('wk-plan');
+  if(wkEl){if(pw){wkEl.style.display='';
+    const cols={FR:'#3f5d7a',AFM:'#b27361',Audit:'#5c8b73'};
+    wkEl.innerHTML=`<div class="wkp-top"><span class="wkp-wk">This week${pw.wk<=13?' — Wk '+pw.wk+' of 13':''}</span><span class="wkp-ph">${esc(pw.phase)}</span><span class="wkp-dt">${esc(pw.dates)}${pw.hrs?' · plan '+pw.hrs+'h':''}</span></div>`+
+      `<div class="wkp-row"><span class="wkp-sub" style="color:${cols.FR}">FR</span><span>${esc(pw.fr)}</span></div>`+
+      `<div class="wkp-row"><span class="wkp-sub" style="color:${cols.AFM}">AFM</span><span>${esc(pw.afm)}</span></div>`+
+      `<div class="wkp-row"><span class="wkp-sub" style="color:${cols.Audit}">Audit</span><span>${esc(pw.audit)}</span></div>`+
+      `<div class="wkp-cp"><b>Checkpoint:</b> ${esc(pw.cp)}</div>`;
+  }else wkEl.style.display='none';}
+  const wh=weekHours(),wkTarget=(pw&&pw.hrs)||32.5,aStk=auditStreak(),tyContact=auditContactOn(ty);
   document.getElementById('cd-wk').innerHTML=
     `<div class="wp"><div class="n">${Math.max(0,Math.ceil(dl/7))}</div><div class="l">weeks left</div></div>`+
-    `<div class="wp"><div class="n">${computeHours()}</div><div class="l">hours logged</div></div>`+
-    `<div class="wp"><div class="n">${recallDue().length}</div><div class="l">recall due</div></div>`;
+    `<div class="wp" title="Plan 32.5h · floor 20h — hit the floor and the week counts"><div class="n">${wh}<span style="font-size:12px;color:var(--soft)">/${wkTarget}</span></div><div class="l">${wh>=wkTarget?'week target hit ✓':wh>=20?'hrs this wk · floor cleared':'hrs this wk · floor 20'}</div></div>`+
+    `<div class="wp"><div class="n">${recallDue().length}</div><div class="l">recall due</div></div>`+
+    `<div class="wp" title="Rule 5: Audit gets contact every day — even 30 minutes"><div class="n">${aStk}${tyContact?' 🔥':''}</div><div class="l">${tyContact?'audit days in a row':aStk?'audit days — touch it today':'audit today? even 30 min'}</div></div>`;
   // pacing nudge — chapters/week needed vs. recent rate
   const pace=pacePlan(),paceEl=document.getElementById('cd-pace');
   if(paceEl){
@@ -1718,7 +1781,7 @@ function gradeRecall(pid,i,grade){const p=S.projects.find(x=>x.id===pid);if(!p)r
   save();
   return {nextIn:daysBetween(ty,r.due),grade};}
 /* single review from a list row */
-function reviewChapter(pid,i,grade){const res=gradeRecall(pid,i,grade);if(!res)return;
+function reviewChapter(pid,i,grade){const res=gradeRecall(pid,i,grade);if(!res)return;if(pid==='audit')checkAuditMilestone();
   miniConfetti();
   toast((grade==='forgot'?'Reset — ':'')+'Next recall in '+res.nextIn+' day'+(res.nextIn>1?'s':'')+'.');
   renderRecall();renderToday();renderProjects();
@@ -1871,19 +1934,42 @@ function renderTT(){const st=studyType(ttDate);
   document.getElementById('tt-body').innerHTML=`<div class="timeline">${rows}<div class="tl-track" style="height:${(TT_END-TT_START)*PX}px">${blk}</div></div>`;}
 function shiftTT(n){ttDate=addDays(ttDate,n);renderTT();}
 function goTTToday(){ttDate=todayY();renderTT();}
-function toggleBlock(id){const b=(S.blocks[ttDate]||[]).find(x=>x.id===id);if(!b)return;b.done=!b.done;if(b.done){miniConfetti();if((S.blocks[ttDate]||[]).filter(x=>x.done).length===1)toast('Day logged — streak intact.');}save();renderTT();afterRender();}
+function toggleBlock(id){const b=(S.blocks[ttDate]||[]).find(x=>x.id===id);if(!b)return;b.done=!b.done;if(b.done){miniConfetti();if((S.blocks[ttDate]||[]).filter(x=>x.done).length===1)toast('Day logged — streak intact.');if(/audit/i.test(b.label||''))checkAuditMilestone();}save();renderTT();afterRender();}
 function delBlock(id){const arr=S.blocks[ttDate]||[];const b=arr.find(x=>x.id===id);if(!b)return;const idx=arr.indexOf(b);S.blocks[ttDate]=arr.filter(x=>x.id!==id);save();renderTT();
   softDelete('Block deleted.',()=>{(S.blocks[ttDate]=S.blocks[ttDate]||[]).splice(Math.min(idx,S.blocks[ttDate].length),0,b);save();renderTT();});}
-function suggestDay(){const st=studyType(ttDate);if(st.rest){toast('Sunday is your rest day.');return;}
+function suggestDay(){const st=studyType(ttDate);
   const arr=S.blocks[ttDate]||[];const has=l=>arr.some(b=>b.label===l);
   const add=(type,label,s,e)=>{if(!has(label))arr.push({id:uid(),type,label,start:s,end:e,done:false});};
-  add('recall','Active recall — yesterday + due list','04:00','04:30');
-  add('concept','New concept — high-weight section','04:30','06:00');
-  add('problems','Problem practice','06:00','07:30');
-  add('revision','Consolidate + maintain other subject','20:30','21:30');
-  add('recall','Recall sweep + plan tomorrow','21:30','22:00');
-  if(st.label==='Saturday')add('paper','Timed paper (RTP / past paper)','10:00','13:00');
-  S.blocks[ttDate]=arr;save();renderTT();toast('Study day scheduled — recall first.');}
+  const pw=planWeek(ttDate),wk=pw?pw.wk:0;
+  if(st.label==='Saturday'){
+    add('concept','AUDIT — main block','09:00','11:00');
+    add('paper','Weekly timed test (RTP / past paper)','11:15','13:15');
+    S.blocks[ttDate]=arr;save();renderTT();toast('Saturday set — evening stays off.');return;}
+  if(wk>=12&&wk<=13){ // P4 sprint — leave block, target 45+ hrs/week
+    const rev=wk===13;
+    add('recall','Active recall — due list first','08:00','08:30');
+    add(rev?'revision':'concept',rev?'FR — revision notes only':'FR — weak areas revision','09:00','12:00');
+    add(rev?'revision':'problems',rev?'AFM — revision notes only':'AFM — formula sheet + drills','13:30','16:30');
+    add('recall',rev?'AUDIT — SA list, ethics, reporting formats':'AUDIT — SA recall + ethics drills','18:00','21:00');
+    S.blocks[ttDate]=arr;save();renderTT();toast(rev?'Final revision day set — taper, don\u2019t cram.':'Sprint day set — this is the block that decides it.');return;}
+  const d=parseY(ttDate).getDay();
+  add('recall','Active recall — yesterday + due list','05:30','06:00');
+  if(d===0||d===2||d===4){ // Sun / Tue / Thu mornings — FR
+    add('concept','FR — concepts + problems','06:00','07:30');
+  }else{
+    add('problems','AFM — problem practice','06:00','07:30');
+  }
+  if(d===2){ // Tuesday evening — Audit main block
+    add('concept','AUDIT — main block','18:30','21:30');
+  }else if(d===4&&wk>=9){ // Phase 3: Thursday evening switches from AFM to Audit
+    add('concept','AUDIT — main block (Phase 3 shift)','18:30','21:30');
+  }else if(d===3){ // Wednesday — light night
+    add('recall','LIGHT NIGHT — Audit recall only','18:30','20:00');
+  }else{
+    add(d===0||d===4?'problems':'revision',d===0||d===4?'AFM — evening block':'FR — evening block','18:30','21:00');
+    add('recall','Audit recall — daily contact','21:00','21:30');
+  }
+  S.blocks[ttDate]=arr;save();renderTT();toast(wk>=9?'Day scheduled — Phase 3 rhythm, audit hours up.':'Day scheduled from the fixed week — recall first.');}
 
 /* ===== SUBJECTS (grouped by weightage) ===== */
 function wclass(band){const m=weightMid(band);return m>=20?'hi':m>=12?'mid':'lo';}
@@ -2236,7 +2322,7 @@ function saveExam(){readExamRows();
   save();closeModal();renderToday();renderExam();toast('Exam schedule updated.');}
 
 const TYPES=['concept','problems','recall','revision','paper','break'];
-const TYPEDEF={concept:{l:'New concept',s:'04:30',e:'06:00'},problems:{l:'Problem practice',s:'06:00',e:'07:30'},recall:{l:'Active recall',s:'04:00',e:'04:30'},revision:{l:'Revision',s:'20:30',e:'21:30'},paper:{l:'Timed paper',s:'10:00',e:'13:00'},break:{l:'Break',s:'16:00',e:'16:15'}};
+const TYPEDEF={concept:{l:'New concept',s:'06:00',e:'07:30'},problems:{l:'Problem practice',s:'18:30',e:'21:00'},recall:{l:'Active recall',s:'05:30',e:'06:00'},revision:{l:'Revision',s:'21:00',e:'21:30'},paper:{l:'Timed paper',s:'11:15',e:'13:15'},break:{l:'Break',s:'16:00',e:'16:15'}};
 function openBlock(pre){blockType=pre||'concept';const d=TYPEDEF[blockType];
   MD.innerHTML=`<h3>Add block · ${prettyY(ttDate)}</h3><label>Type</label><div class="pick" id="tp">${TYPES.map(t=>`<button onclick="pickType('${t}')" class="${t===blockType?'on':''}">${t}</button>`).join('')}</div>
     <label>Label</label><input class="field" id="b-label" value="${d.l}">
@@ -2341,14 +2427,20 @@ const STAT_WARN=["A few recalls are overdue — clear them before they fade.","R
 function petName(){return S.petName||'Almanac';}
 function renamePet(){}
 function petState(){const ty=todayY(),st=studyType(ty),stk=computeStreak(),over=recallDue().filter(r=>r.over>0).length,
-  active=(S.blocks[ty]||[]).some(b=>b.done)||S.tasks.some(t=>t.done&&t.doneAt===ty)||S.projects.some(p=>p.stages.some(s=>s.doneAt===ty));
+  active=(S.blocks[ty]||[]).some(b=>b.done)||S.tasks.some(t=>t.done&&t.doneAt===ty)||S.projects.some(p=>p.stages.some(s=>s.doneAt===ty)),
+  hr=new Date().getHours();
   let tone='good',pool=STAT_GOOD;
   if(over>=2){tone='warn';pool=STAT_WARN;}
+  else if(hr>=18&&!auditContactOn(ty)){tone='warn';pool=["No audit contact yet today — even 30 minutes counts. It decays faster than the other two.","Rule 5: touch Audit before the day ends. A short SA recall is enough.","Audit hasn't been touched today. 40 in this paper decides November vs May."];}
   else if(st.rest){tone='rest';pool=STAT_REST;}
   else if(active){tone='good';pool=STAT_GOOD;}
   else if(stk===0){tone='nudge';pool=STAT_NUDGE;}
   else{tone='good';pool=STAT_GOOD;}
   return {tone,msg:pool[Math.floor(Math.random()*pool.length)]};}
+/* celebrate audit-contact streak milestones once each */
+function checkAuditMilestone(){const n=auditStreak(),marks=[7,14,21,30,45,60,90];
+  S.auditCele=S.auditCele||[];
+  if(marks.includes(n)&&!S.auditCele.includes(n)){S.auditCele.push(n);save();miniConfetti();toast(n+' straight days of audit contact — the compounding is real. 🔥');}}
 
 /* ===== EXAM readiness ===== */
 function paperReadiness(p){if(!p.pid)return null;const pr=S.projects.find(x=>x.id===p.pid);if(!pr)return null;
@@ -2669,8 +2761,32 @@ function seedProjects(ty){
   return[
     {id:'afm',name:'AFM / SFM',desc:'Paper 2 · Advanced Financial Management. Section II–IV carry the marks — start there.',color:'#b27361',deadline:'2026-06-20',createdAt:ty,stages:build(AFM)},
     {id:'fr',name:'FR',desc:'Paper 1 · Financial Reporting (Ind AS). Section III (Assets) is the heaviest single block.',color:'#3f5d7a',deadline:'2026-07-20',createdAt:ty,stages:build(FR)},
+    seedAuditProject(ty),
   ];
 }
+/* Paper 3 · Advanced Auditing, Assurance & Professional Ethics — ICAI new-scheme syllabus (19 topics),
+   grouped by the BOS section-wise weightage: I = Topics 1–11 (~45–55%), V = Ethics (~15–25%). */
+function seedAuditProject(ty){
+  const AUDIT=[
+    ['I','45–55%',['SQC 1 — Quality Control for Firms','SA 220 — Quality Control for an Audit of FS','SA 240 — Fraud in an Audit of FS','SA 250 — Consideration of Laws & Regulations','SA 260 — Communication with TCWG','SA 299 — Joint Audit of FS','SA 402 — Entity Using a Service Organisation','SA 300 — Planning an Audit (case-study application)','SA 450 — Evaluation of Misstatements','SA 520 — Analytical Procedures','SA 540 — Auditing Accounting Estimates & Fair Value','SA 610 — Using the Work of Internal Auditors','SA 620 — Using the Work of an Auditor\u2019s Expert','Internal Control — components, evaluation, risk-based audit','SA 265 — Communicating Deficiencies in Internal Control','SA 330 — Responses to Assessed Risks (+ SA 315/320 application)','Audit Evidence — SA 500/501/505/510/530/550 (case-study application)','SA 560 — Subsequent Events','SA 570 — Going Concern','SA 580 — Written Representations','SA 700 — Forming an Opinion & Reporting','SA 701 — Key Audit Matters','SA 705 — Modifications to the Opinion','SA 706 — Emphasis of Matter & Other Matter Paragraphs','SA 710 — Comparative Information','SA 720 — Other Information','SA 800/805/810 — Special Purpose & Summary FS (overview)','SRS 4400/4410 — Agreed-upon Procedures & Compilations (overview)','SRE 2400/2410 — Review Engagements (overview)','SAE 3400/3402/3420 — Prospective FI & Assurance Reports (overview)']],
+    ['II','3–6%',['Digital Auditing & Assurance — CAAT, data analytics, AI, remote audit','Group Audits — consolidation, component auditors, SA 600']],
+    ['III','17–24%',['Special Features — Audit of Banks','Special Features — Audit of NBFCs','Overview — Audit of Public Sector Undertakings','Internal Audit — Companies Act 2013, standards, audit trail','Due Diligence & Investigation','Forensic Accounting & Investigation Standards']],
+    ['IV','3–6%',['Emerging Areas — SDG & ESG Assurance']],
+    ['V','17–24%',['Ethics — IESBA Code, fundamental principles & conceptual framework','Ethics — threats, evaluation & safeguards','Ethics — CA Act 1949 & Regulations 1988 (important provisions)']],
+  ];
+  const stages=AUDIT.flatMap(([section,weight,chs])=>chs.map(name=>({name,section,weight,hot:weightMid(weight)>=20,done:false,doneAt:null,recall:null,passes:[],cards:[],mastery:0})));
+  return {id:'audit',name:'Audit',desc:'Paper 3 · Advanced Auditing, Assurance & Professional Ethics. Section I (SAs) + Ethics ≈ 70% of the paper — daily contact, never zero. Clearing 40 here decides November vs May.',color:'#5c8b73',deadline:'2026-10-10',createdAt:ty||todayY(),stages};
+}
+/* Audit milestones & mocks aligned to the 13-week planner */
+function seedAuditMeetings(){return[
+    {kind:'paper',title:'Audit baseline past paper — timed',date:'2026-08-15',notes:'Wk 2 checkpoint: find your real baseline'},
+    {kind:'paper',title:'Audit mock — ethics focus',date:'2026-09-19',notes:'Wk 7: ethics is high-yield, do not skip'},
+    {kind:'milestone',title:'Audit first pass done',date:'2026-10-10'},
+    {kind:'paper',title:'Full mock — all three papers, exam timings',date:'2026-10-17',notes:'Wk 11'},
+    {kind:'milestone',title:'Dashain leave block begins — target 45+ hrs/wk',date:'2026-10-18'},
+    {kind:'paper',title:'Second full mock',date:'2026-10-24',notes:'Dashain sprint'},
+    {kind:'paper',title:'Third full mock — then taper',date:'2026-10-31',notes:'Sleep matters more than one more hour'},
+  ].map(m=>Object.assign(m,{id:uid(),time:m.time||'',done:false}));}
 function seedMeetings(){return[
     {kind:'milestone',title:'AFM first pass done',date:'2026-06-20'},
     {kind:'milestone',title:'FR first pass done',date:'2026-07-20'},
@@ -2695,7 +2811,7 @@ function seed(){if(localStorage.getItem(KEY))return;const ty=todayY();
   S.projects=seedProjects(ty);
   S.meetings=(old&&Array.isArray(old.meetings)&&old.meetings.length)?old.meetings:seedMeetings();
   S.tasks=(old&&Array.isArray(old.tasks)&&old.tasks.length)?old.tasks:[
-    {id:uid(),text:'Set up ICAI BOS new-scheme study material for FR & AFM',date:ty,prio:'high',done:false},
+    {id:uid(),text:'Set up ICAI BOS new-scheme study material for FR, AFM & Audit',date:ty,prio:'high',done:false},
     {id:uid(),text:'Skim full weightage map — mark Section II/III/IV chapters to hit first',date:ty,prio:'med',done:false}];
   S.blocks=(old&&old.blocks)||{};
   S.recallLog=[];
@@ -2711,6 +2827,62 @@ function seed(){if(localStorage.getItem(KEY))return;const ty=todayY();
 
 /* ===== migrate within v2 (ensure fields) ===== */
 function migrate(){let dirty=false;
+  // v3: Paper 3 (Audit) becomes a tracked subject with the full ICAI syllabus
+  if(S.auditV!==1){
+    if(!(S.projects||[]).some(p=>p.id==='audit'))S.projects.push(seedAuditProject(todayY()));
+    (S.examSchedule||[]).forEach(p=>{if(p.n===3&&!p.pid)p.pid='audit';});
+    const have=new Set((S.meetings||[]).map(m=>(m.title||'').toLowerCase()));
+    seedAuditMeetings().forEach(m=>{if(!have.has(m.title.toLowerCase()))S.meetings.push(m);});
+    if(!(S.tasks||[]).some(t=>/dashain/i.test(t.text||'')))S.tasks.push({id:uid(),text:'Confirm Dashain holiday dates & book study leave (in August, not October)',date:todayY(),prio:'high',done:false});
+    S.auditV=1;dirty=true;
+  }
+  // v3.1: official ICAI section weightage for Paper 3 (issued 26 Oct 2023) + neutral task wording
+  if(S.auditV===1){
+    const ap=(S.projects||[]).find(p=>p.id==='audit');
+    if(ap){const fresh=seedAuditProject().stages;
+      ap.stages.forEach(s=>{const f=fresh.find(x=>x.name===s.name||x.name.split('—')[0].trim()===s.name.split('—')[0].trim());
+        if(f){s.section=f.section;s.weight=f.weight;s.hot=f.hot;}});
+      // Due Diligence + Emerging split changed grouping; ensure any unmatched stage keeps a sane band
+      ap.stages.forEach(s=>{if(!s.weight)s.weight='3–6%';});}
+    (S.tasks||[]).forEach(t=>{if(/sanjay/i.test(t.text||''))t.text='Confirm Dashain holiday dates & book study leave (in August, not October)';});
+    S.auditV=2;dirty=true;
+  }
+  // v3.2: split coarse Audit topics into SA-level recall cards, carrying over progress
+  if(S.auditV===2){
+    const ai=(S.projects||[]).findIndex(p=>p.id==='audit');
+    if(ai>=0){
+      const oldP=S.projects[ai],fresh=seedAuditProject(oldP.createdAt);
+      // which new cards each old coarse card expands into (matched by substring of the new name)
+      const XP={'Quality Control — SQC 1':['SQC 1','SA 220'],
+        'General Principles':['SA 240','SA 250','SA 260','SA 299','SA 402'],
+        'Audit Planning':['SA 300','SA 450','SA 520','SA 540','SA 610','SA 620'],
+        'Materiality, Risk':['Internal Control —','SA 265','SA 330'],
+        'Audit Evidence':['Audit Evidence'],
+        'Completion & Review':['SA 560','SA 570','SA 580'],
+        'Reporting — SA 700':['SA 700','SA 701','SA 705','SA 706','SA 710','SA 720'],
+        'Specialized Areas':['SA 800'],
+        'Audit-related Services':['SRS 4400'],
+        'Review of Financial Information':['SRE 2400'],
+        'Prospective FI':['SAE 3400'],
+        'Digital Auditing':['Digital Auditing'],
+        'Group Audits':['Group Audits'],
+        'Special Features — Audit of Banks & NBFCs':['Audit of Banks','Audit of NBFCs'],
+        'Overview — Audit of Public Sector':['Public Sector'],
+        'Internal Audit —':['Internal Audit —'],
+        'Due Diligence':['Due Diligence','Forensic Accounting'],
+        'Emerging Areas':['Emerging Areas'],
+        'Professional Ethics':['Ethics —']};
+      oldP.stages.forEach(os=>{
+        const key=Object.keys(XP).find(k=>os.name.startsWith(k));if(!key)return;
+        fresh.stages.forEach(ns=>{if(XP[key].some(sub=>ns.name.includes(sub))){
+          if(os.done){ns.done=true;ns.doneAt=os.doneAt;ns.mastery=os.mastery;
+            ns.recall=os.recall?JSON.parse(JSON.stringify(os.recall)):{stage:0,due:addDays(os.doneAt||todayY(),1),last:os.doneAt||todayY()};}
+          ns.passes=(os.passes||[]).slice();}});});
+      fresh.color=safeColor(oldP.color,'#5c8b73');fresh.deadline=oldP.deadline||fresh.deadline;
+      S.projects[ai]=fresh;
+    }
+    S.auditV=3;dirty=true;
+  }
   S.recallLog=S.recallLog||[];
   S.focusLog=S.focusLog||[];
   if(S.sound===undefined){S.sound=true;dirty=true;}
